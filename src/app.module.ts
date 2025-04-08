@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule, ConfigFactory } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { DynamicModule } from '@nestjs/common';
+
+import { appConfig } from '@configs/app.config';
+import mongooseConfig from '@configs/mongoose.config';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, mongooseConfig] as ConfigFactory[],
+    }),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    MongooseModule.forRoot(process.env.MONGODB_URI),
+  ] as DynamicModule[],
 })
 export class AppModule {}

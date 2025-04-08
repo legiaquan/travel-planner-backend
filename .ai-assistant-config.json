@@ -1,0 +1,137 @@
+{
+  "projectContext": {
+    "businessDomain": {
+      "name": "Travel Planning",
+      "coreFeatures": [
+        "Trip Planning",
+        "Itinerary Management",
+        "Destination Information",
+        "User Travel Preferences",
+        "Travel Recommendations"
+      ],
+      "keyEntities": [
+        "User",
+        "Trip",
+        "Destination",
+        "Itinerary",
+        "Activity",
+        "Accommodation",
+        "Transportation"
+      ]
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": ">=8.0.0",
+      "lockFile": "pnpm-lock.yaml",
+      "commands": {
+        "install": "pnpm install",
+        "add": "pnpm add",
+        "remove": "pnpm remove",
+        "run": "pnpm run"
+      }
+    },
+    "codebasePatterns": {
+      "namingConventions": {
+        "files": "kebab-case",
+        "classes": "PascalCase",
+        "functions": "camelCase",
+        "variables": "camelCase",
+        "constants": "UPPER_SNAKE_CASE"
+      },
+      "fileStructure": {
+        "src": {
+          "routes": "API endpoints and routing logic",
+          "controllers": "Request handling and response formatting",
+          "services": "Business logic implementation",
+          "repositories": "Data access layer",
+          "models": "Data structures and schemas",
+          "middlewares": "Request processing and validation",
+          "utils": "Helper functions and utilities",
+          "config": "Application configuration",
+          "types": "TypeScript type definitions"
+        },
+        "tests": {
+          "unit": "Individual component tests",
+          "integration": "Component interaction tests",
+          "e2e": "End-to-end API tests"
+        }
+      }
+    },
+    "commonPatterns": {
+      "errorHandling": {
+        "customErrors": "Custom error classes for different scenarios",
+        "errorMiddleware": "Centralized error handling",
+        "errorCodes": "Standardized error codes"
+      },
+      "validation": {
+        "input": "Request body and parameter validation",
+        "business": "Business rule validation",
+        "data": "Data integrity validation"
+      },
+      "logging": {
+        "levels": ["error", "warn", "info", "debug"],
+        "format": "Structured JSON logging",
+        "context": "Request ID, user ID, timestamp"
+      }
+    },
+    "developmentGuidelines": {
+      "codeQuality": {
+        "complexity": "Keep functions under 20 lines",
+        "nesting": "Maximum 3 levels of nesting",
+        "comments": "Document complex logic and business rules"
+      },
+      "testing": {
+        "unitTests": "Test all business logic",
+        "integrationTests": "Test API endpoints",
+        "coverage": "Minimum 80% coverage"
+      },
+      "documentation": {
+        "api": "Swagger/OpenAPI documentation",
+        "code": "JSDoc comments for complex functions",
+        "architecture": "Keep ARCHITECTURE.md updated"
+      }
+    },
+    "deploymentContext": {
+      "environments": {
+        "development": {
+          "database": "Local PostgreSQL",
+          "cache": "In-memory",
+          "storage": "Local file system"
+        },
+        "staging": {
+          "database": "RDS PostgreSQL",
+          "cache": "ElastiCache Redis",
+          "storage": "S3"
+        },
+        "production": {
+          "database": "RDS PostgreSQL with read replicas",
+          "cache": "ElastiCache Redis cluster",
+          "storage": "S3 with CloudFront"
+        }
+      },
+      "scaling": {
+        "horizontal": "Multiple Lambda instances",
+        "vertical": "Database read replicas",
+        "caching": "Redis for frequent queries"
+      }
+    },
+    "securityContext": {
+      "authentication": {
+        "jwt": {
+          "algorithm": "RS256",
+          "expiration": "1 hour",
+          "refresh": "7 days"
+        }
+      },
+      "authorization": {
+        "roles": ["admin", "user", "guest"],
+        "permissions": "Role-based access control"
+      },
+      "dataProtection": {
+        "encryption": "At-rest and in-transit",
+        "sanitization": "Input sanitization",
+        "validation": "Strict input validation"
+      }
+    }
+  }
+}

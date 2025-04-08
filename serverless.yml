@@ -1,0 +1,38 @@
+service: travel-planner-api
+
+frameworkVersion: '3'
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-typescript
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  environment:
+    NODE_ENV: ${env:NODE_ENV, 'development'}
+    CORS_ORIGIN: ${env:CORS_ORIGIN, '*'}
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3000
+  dotenv:
+    path: ./.env
+    basePath: ./
+    logging: false
+    required:
+      - DATABASE_URL
+      - JWT_SECRET
+
+functions:
+  api:
+    handler: src/main.serverless.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
