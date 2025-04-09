@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
-import { IUser } from '../types/user.type';
+import { IUser } from '@/types/user.type';
 
-export interface IUserDocument extends IUser, Document {
+export interface IUserDocument extends Omit<IUser, '_id'>, Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
   generateResetPasswordToken(): Promise<string>;
   validateResetPasswordToken(token: string): boolean;
@@ -12,4 +12,4 @@ export interface IUserDocument extends IUser, Document {
   updateSubscription(subscription: Partial<IUser['subscription']>): Promise<void>;
   linkSocialProfile(provider: string, profileId: string): Promise<void>;
   unlinkSocialProfile(provider: string): Promise<void>;
-} 
+}

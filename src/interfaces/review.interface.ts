@@ -1,8 +1,8 @@
 import { Document } from 'mongoose';
-import { IReview } from '../types/review.type';
+import { IReview } from '@/types/review.type';
 
-export interface IReviewDocument extends IReview, Document {
+export interface IReviewDocument extends Omit<IReview, '_id'>, Document {
   // Add any review-specific methods here
   isOwner(userId: string): boolean;
   toggleLike(userId: string): Promise<void>;
-} 
+}
