@@ -1,0 +1,1877 @@
+{
+  "info": {
+    "_postman_id": "f8a7b6c5-d4e3-4c2b-a1b0-9d8e7f6e5d4c",
+    "name": "Travel Planner API",
+    "description": "API collection for the Travel Planner application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "API endpoints for user authentication",
+      "item": [
+        {
+          "name": "Sign In",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"example@travel.com\",\n    \"password\": \"123456789\",\n    \"rememberMe\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/sign-in",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "sign-in"]
+            },
+            "description": "Authenticate a user and get access token"
+          },
+          "response": [
+            {
+              "name": "Successful Sign In",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"example@travel.com\",\n    \"password\": \"123456789\",\n    \"rememberMe\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/sign-in",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "sign-in"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"user\": {\n        \"id\": \"user-1\",\n        \"name\": \"John Doe\",\n        \"email\": \"example@travel.com\",\n        \"avatar\": \"https://example.com/avatars/john.jpg\",\n        \"role\": \"user\",\n        \"subscription\": {\n            \"plan\": \"free\",\n            \"expiresAt\": null\n        },\n        \"createdAt\": \"2023-01-15T08:30:00Z\",\n        \"updatedAt\": \"2023-04-20T14:15:30Z\"\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEiLCJlbWFpbCI6ImV4YW1wbGVAdHJhdmVsLmNvbSIsImlhdCI6MTYxNjc2MzIwMCwiZXhwIjoxNjE2ODQ5NjAwfQ.example_token_signature\",\n    \"refreshToken\": \"rt_1a2b3c4d5e6f7g8h9i0j\"\n}"
+            },
+            {
+              "name": "Invalid Credentials",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"example@travel.com\",\n    \"password\": \"wrongpassword\",\n    \"rememberMe\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/sign-in",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "sign-in"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Invalid email or password\",\n    \"code\": \"INVALID_CREDENTIALS\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Sign Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\",\n    \"password\": \"securePassword123\",\n    \"confirmPassword\": \"securePassword123\",\n    \"terms\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/sign-up",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "sign-up"]
+            },
+            "description": "Register a new user"
+          },
+          "response": [
+            {
+              "name": "Successful Sign Up",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\",\n    \"password\": \"securePassword123\",\n    \"confirmPassword\": \"securePassword123\",\n    \"terms\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/sign-up",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "sign-up"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"user\": {\n        \"id\": \"user-2\",\n        \"name\": \"Jane Smith\",\n        \"email\": \"jane@example.com\",\n        \"avatar\": null,\n        \"role\": \"user\",\n        \"subscription\": {\n            \"plan\": \"free\",\n            \"expiresAt\": null\n        },\n        \"createdAt\": \"2023-05-10T09:45:00Z\",\n        \"updatedAt\": \"2023-05-10T09:45:00Z\"\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTIiLCJlbWFpbCI6ImphbmVAZXhhbXBsZS5jb20iLCJpYXQiOjE2MTY3NjMyMDAsImV4cCI6MTYxNjg0OTYwMH0.example_token_signature\",\n    \"refreshToken\": \"rt_2b3c4d5e6f7g8h9i0j1k\"\n}"
+            },
+            {
+              "name": "Email Already Exists",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"example@travel.com\",\n    \"password\": \"securePassword123\",\n    \"confirmPassword\": \"securePassword123\",\n    \"terms\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/sign-up",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "sign-up"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Email already in use\",\n    \"code\": \"EMAIL_EXISTS\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Sign Out",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/sign-out",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "sign-out"]
+            },
+            "description": "Sign out the current user"
+          },
+          "response": [
+            {
+              "name": "Successful Sign Out",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/sign-out",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "sign-out"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Successfully signed out\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"rt_1a2b3c4d5e6f7g8h9i0j\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/refresh-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh-token"]
+            },
+            "description": "Refresh the access token"
+          },
+          "response": [
+            {
+              "name": "Successful Token Refresh",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"refreshToken\": \"rt_1a2b3c4d5e6f7g8h9i0j\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/refresh-token",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "refresh-token"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEiLCJlbWFpbCI6ImV4YW1wbGVAdHJhdmVsLmNvbSIsImlhdCI6MTYxNjg0OTYwMCwiZXhwIjoxNjE2OTM2MDAwfQ.new_token_signature\",\n    \"refreshToken\": \"rt_new1a2b3c4d5e6f7g8h9i0j\"\n}"
+            },
+            {
+              "name": "Invalid Refresh Token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"refreshToken\": \"invalid_refresh_token\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/auth/refresh-token",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "refresh-token"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Invalid refresh token\",\n    \"code\": \"INVALID_REFRESH_TOKEN\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "description": "API endpoints for user profile management",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Get the current user's profile"
+          },
+          "response": [
+            {
+              "name": "Successful Profile Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "profile"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"user\": {\n        \"id\": \"user-1\",\n        \"name\": \"John Doe\",\n        \"email\": \"example@travel.com\",\n        \"avatar\": \"https://example.com/avatars/john.jpg\",\n        \"bio\": \"Travel enthusiast and photographer\",\n        \"location\": \"San Francisco, CA\",\n        \"website\": \"https://johndoe.com\",\n        \"role\": \"user\",\n        \"subscription\": {\n            \"plan\": \"premium\",\n            \"expiresAt\": \"2023-12-31T23:59:59Z\"\n        },\n        \"stats\": {\n            \"trips\": 12,\n            \"reviews\": 8,\n            \"followers\": 45,\n            \"following\": 32\n        },\n        \"preferences\": {\n            \"theme\": \"light\",\n            \"language\": \"en\",\n            \"currency\": \"USD\",\n            \"notifications\": {\n                \"email\": true,\n                \"push\": true\n            }\n        },\n        \"createdAt\": \"2023-01-15T08:30:00Z\",\n        \"updatedAt\": \"2023-04-20T14:15:30Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"bio\": \"Travel enthusiast, photographer, and food lover\",\n    \"location\": \"New York, NY\",\n    \"website\": \"https://johndoe-travel.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Update the current user's profile"
+          },
+          "response": [
+            {
+              "name": "Successful Profile Update",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"bio\": \"Travel enthusiast, photographer, and food lover\",\n    \"location\": \"New York, NY\",\n    \"website\": \"https://johndoe-travel.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "profile"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"user\": {\n        \"id\": \"user-1\",\n        \"name\": \"John Doe Updated\",\n        \"email\": \"example@travel.com\",\n        \"avatar\": \"https://example.com/avatars/john.jpg\",\n        \"bio\": \"Travel enthusiast, photographer, and food lover\",\n        \"location\": \"New York, NY\",\n        \"website\": \"https://johndoe-travel.com\",\n        \"role\": \"user\",\n        \"subscription\": {\n            \"plan\": \"premium\",\n            \"expiresAt\": \"2023-12-31T23:59:59Z\"\n        },\n        \"createdAt\": \"2023-01-15T08:30:00Z\",\n        \"updatedAt\": \"2023-05-15T10:20:30Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentPassword\": \"123456789\",\n    \"newPassword\": \"NewSecurePassword123\",\n    \"confirmPassword\": \"NewSecurePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "password"]
+            },
+            "description": "Change the user's password"
+          },
+          "response": [
+            {
+              "name": "Successful Password Change",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"currentPassword\": \"123456789\",\n    \"newPassword\": \"NewSecurePassword123\",\n    \"confirmPassword\": \"NewSecurePassword123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "password"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Password updated successfully\"\n}"
+            },
+            {
+              "name": "Incorrect Current Password",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"currentPassword\": \"wrongpassword\",\n    \"newPassword\": \"NewSecurePassword123\",\n    \"confirmPassword\": \"NewSecurePassword123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "password"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Current password is incorrect\",\n    \"code\": \"INVALID_PASSWORD\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/user-2",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "user-2"]
+            },
+            "description": "Get another user's profile by ID"
+          },
+          "response": [
+            {
+              "name": "Successful User Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/user-2",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "user-2"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"user\": {\n        \"id\": \"user-2\",\n        \"name\": \"Jane Smith\",\n        \"avatar\": \"https://example.com/avatars/jane.jpg\",\n        \"bio\": \"Adventure seeker and mountain climber\",\n        \"location\": \"Denver, CO\",\n        \"website\": \"https://janesmith-adventures.com\",\n        \"stats\": {\n            \"trips\": 18,\n            \"reviews\": 15,\n            \"followers\": 120,\n            \"following\": 85\n        },\n        \"isFollowing\": false,\n        \"createdAt\": \"2022-08-10T12:30:00Z\"\n    }\n}"
+            },
+            {
+              "name": "User Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/nonexistent-user",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "nonexistent-user"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"User not found\",\n    \"code\": \"USER_NOT_FOUND\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Follow User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/user-2/follow",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "user-2", "follow"]
+            },
+            "description": "Follow another user"
+          },
+          "response": [
+            {
+              "name": "Successfully Followed User",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/user-2/follow",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "user-2", "follow"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"You are now following Jane Smith\",\n    \"isFollowing\": true\n}"
+            }
+          ]
+        },
+        {
+          "name": "Unfollow User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/user-2/unfollow",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "user-2", "unfollow"]
+            },
+            "description": "Unfollow a user"
+          },
+          "response": [
+            {
+              "name": "Successfully Unfollowed User",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/user-2/unfollow",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "users", "user-2", "unfollow"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"You have unfollowed Jane Smith\",\n    \"isFollowing\": false\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Trip Planning",
+      "description": "API endpoints for managing trips",
+      "item": [
+        {
+          "name": "Get Trips",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/trips",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "upcoming"
+                },
+                {
+                  "key": "sort",
+                  "value": "startDate:asc"
+                }
+              ]
+            },
+            "description": "Get a list of user's trips"
+          },
+          "response": [
+            {
+              "name": "Successful Trips Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "status",
+                      "value": "upcoming"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "startDate:asc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"trips\": [\n        {\n            \"id\": \"trip-1\",\n            \"title\": \"Weekend in Hanoi\",\n            \"destination\": \"Hanoi, Vietnam\",\n            \"startDate\": \"2023-06-15T00:00:00Z\",\n            \"endDate\": \"2023-06-18T00:00:00Z\",\n            \"status\": \"upcoming\",\n            \"coverImage\": \"https://example.com/images/hanoi.jpg\",\n            \"totalDays\": 3,\n            \"totalActivities\": 8,\n            \"createdAt\": \"2023-05-01T14:30:00Z\",\n            \"updatedAt\": \"2023-05-10T09:15:00Z\"\n        },\n        {\n            \"id\": \"trip-2\",\n            \"title\": \"Summer in Da Nang\",\n            \"destination\": \"Da Nang, Vietnam\",\n            \"startDate\": \"2023-07-10T00:00:00Z\",\n            \"endDate\": \"2023-07-17T00:00:00Z\",\n            \"status\": \"upcoming\",\n            \"coverImage\": \"https://example.com/images/danang.jpg\",\n            \"totalDays\": 7,\n            \"totalActivities\": 15,\n            \"createdAt\": \"2023-05-05T11:45:00Z\",\n            \"updatedAt\": \"2023-05-12T16:20:00Z\"\n        }\n    ],\n    \"total\": 5,\n    \"page\": 1,\n    \"limit\": 10,\n    \"pages\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Trip",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Exploring Hoi An\",\n    \"destination\": \"Hoi An, Vietnam\",\n    \"startDate\": \"2023-08-05T00:00:00Z\",\n    \"endDate\": \"2023-08-10T00:00:00Z\",\n    \"description\": \"A cultural exploration of Hoi An's ancient town and surrounding areas\",\n    \"coverImage\": \"https://example.com/images/hoian.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/trips",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips"]
+            },
+            "description": "Create a new trip"
+          },
+          "response": [
+            {
+              "name": "Successful Trip Creation",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Exploring Hoi An\",\n    \"destination\": \"Hoi An, Vietnam\",\n    \"startDate\": \"2023-08-05T00:00:00Z\",\n    \"endDate\": \"2023-08-10T00:00:00Z\",\n    \"description\": \"A cultural exploration of Hoi An's ancient town and surrounding areas\",\n    \"coverImage\": \"https://example.com/images/hoian.jpg\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"trip\": {\n        \"id\": \"trip-3\",\n        \"title\": \"Exploring Hoi An\",\n        \"destination\": \"Hoi An, Vietnam\",\n        \"startDate\": \"2023-08-05T00:00:00Z\",\n        \"endDate\": \"2023-08-10T00:00:00Z\",\n        \"description\": \"A cultural exploration of Hoi An's ancient town and surrounding areas\",\n        \"coverImage\": \"https://example.com/images/hoian.jpg\",\n        \"status\": \"upcoming\",\n        \"totalDays\": 5,\n        \"totalActivities\": 0,\n        \"createdAt\": \"2023-05-20T08:45:00Z\",\n        \"updatedAt\": \"2023-05-20T08:45:00Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Trip Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/trips/trip-1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", "trip-1"]
+            },
+            "description": "Get details of a specific trip"
+          },
+          "response": [
+            {
+              "name": "Successful Trip Details Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips/trip-1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips", "trip-1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"trip\": {\n        \"id\": \"trip-1\",\n        \"title\": \"Weekend in Hanoi\",\n        \"destination\": \"Hanoi, Vietnam\",\n        \"startDate\": \"2023-06-15T00:00:00Z\",\n        \"endDate\": \"2023-06-18T00:00:00Z\",\n        \"description\": \"Exploring the vibrant streets and culture of Hanoi\",\n        \"coverImage\": \"https://example.com/images/hanoi.jpg\",\n        \"status\": \"upcoming\",\n        \"totalDays\": 3,\n        \"totalActivities\": 8,\n        \"budget\": {\n            \"currency\": \"USD\",\n            \"estimated\": 500,\n            \"spent\": 0\n        },\n        \"notes\": \"Remember to bring comfortable walking shoes and a hat for sun protection.\",\n        \"createdAt\": \"2023-05-01T14:30:00Z\",\n        \"updatedAt\": \"2023-05-10T09:15:00Z\",\n        \"sharedWith\": [\n            {\n                \"userId\": \"user-2\",\n                \"name\": \"Jane Smith\",\n                \"avatar\": \"https://example.com/avatars/jane.jpg\",\n                \"permission\": \"view\"\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "Trip Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips/nonexistent-trip",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips", "nonexistent-trip"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Trip not found\",\n    \"code\": \"TRIP_NOT_FOUND\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "description": "API endpoints for managing trip activities",
+      "item": [
+        {
+          "name": "Get Trip Itinerary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/trips/trip-1/itinerary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", "trip-1", "itinerary"]
+            },
+            "description": "Get the full itinerary for a trip"
+          },
+          "response": [
+            {
+              "name": "Successful Itinerary Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips/trip-1/itinerary",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips", "trip-1", "itinerary"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"itinerary\": {\n        \"tripId\": \"trip-1\",\n        \"days\": [\n            {\n                \"dayIndex\": 0,\n                \"date\": \"2023-06-15T00:00:00Z\",\n                \"activities\": [\n                    {\n                        \"id\": \"activity-1\",\n                        \"title\": \"Arrival at Noi Bai Airport\",\n                        \"type\": \"transportation\",\n                        \"startTime\": \"2023-06-15T10:00:00Z\",\n                        \"endTime\": \"2023-06-15T11:30:00Z\",\n                        \"location\": {\n                            \"name\": \"Noi Bai International Airport\",\n                            \"address\": \"Soc Son, Hanoi, Vietnam\",\n                            \"coordinates\": {\n                                \"lat\": 21.2187149,\n                                \"lng\": 105.8019822\n                            }\n                        },\n                        \"notes\": \"Flight VN123\",\n                        \"status\": \"confirmed\"\n                    },\n                    {\n                        \"id\": \"activity-2\",\n                        \"title\": \"Check-in at Hotel\",\n                        \"type\": \"accommodation\",\n                        \"startTime\": \"2023-06-15T14:00:00Z\",\n                        \"endTime\": \"2023-06-15T15:00:00Z\",\n                        \"location\": {\n                            \"name\": \"Hanoi Pearl Hotel\",\n                            \"address\": \"23 Hang Dau, Hoan Kiem, Hanoi, Vietnam\",\n                            \"coordinates\": {\n                                \"lat\": 21.0313,\n                                \"lng\": 105.8516\n                            }\n                        },\n                        \"notes\": \"Reservation #HN12345\",\n                        \"status\": \"confirmed\"\n                    }\n                ]\n            },\n            {\n                \"dayIndex\": 1,\n                \"date\": \"2023-06-16T00:00:00Z\",\n                \"activities\": [\n                    {\n                        \"id\": \"activity-3\",\n                        \"title\": \"Hoan Kiem Lake Walking Tour\",\n                        \"type\": \"sightseeing\",\n                        \"startTime\": \"2023-06-16T09:00:00Z\",\n                        \"endTime\": \"2023-06-16T11:00:00Z\",\n                        \"location\": {\n                            \"name\": \"Hoan Kiem Lake\",\n                            \"address\": \"Hoan Kiem District, Hanoi, Vietnam\",\n                            \"coordinates\": {\n                                \"lat\": 21.0285,\n                                \"lng\": 105.8524\n                            }\n                        },\n                        \"notes\": \"Visit Ngoc Son Temple and The Huc Bridge\",\n                        \"status\": \"planned\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Add Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Visit Ho Chi Minh Mausoleum\",\n    \"type\": \"sightseeing\",\n    \"startTime\": \"2023-06-16T14:00:00Z\",\n    \"endTime\": \"2023-06-16T16:00:00Z\",\n    \"location\": {\n        \"name\": \"Ho Chi Minh Mausoleum\",\n        \"address\": \"2 Hung Vuong, Dien Bien, Ba Dinh, Hanoi, Vietnam\",\n        \"coordinates\": {\n            \"lat\": 21.0368,\n            \"lng\": 105.8346\n        }\n    },\n    \"notes\": \"Remember to dress appropriately. No shorts or sleeveless shirts.\",\n    \"status\": \"planned\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", "trip-1", "days", "1", "activities"]
+            },
+            "description": "Add a new activity to a trip day"
+          },
+          "response": [
+            {
+              "name": "Successful Activity Creation",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Visit Ho Chi Minh Mausoleum\",\n    \"type\": \"sightseeing\",\n    \"startTime\": \"2023-06-16T14:00:00Z\",\n    \"endTime\": \"2023-06-16T16:00:00Z\",\n    \"location\": {\n        \"name\": \"Ho Chi Minh Mausoleum\",\n        \"address\": \"2 Hung Vuong, Dien Bien, Ba Dinh, Hanoi, Vietnam\",\n        \"coordinates\": {\n            \"lat\": 21.0368,\n            \"lng\": 105.8346\n        }\n    },\n    \"notes\": \"Remember to dress appropriately. No shorts or sleeveless shirts.\",\n    \"status\": \"planned\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips", "trip-1", "days", "1", "activities"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"activity\": {\n        \"id\": \"activity-4\",\n        \"title\": \"Visit Ho Chi Minh Mausoleum\",\n        \"type\": \"sightseeing\",\n        \"startTime\": \"2023-06-16T14:00:00Z\",\n        \"endTime\": \"2023-06-16T16:00:00Z\",\n        \"location\": {\n            \"name\": \"Ho Chi Minh Mausoleum\",\n            \"address\": \"2 Hung Vuong, Dien Bien, Ba Dinh, Hanoi, Vietnam\",\n            \"coordinates\": {\n                \"lat\": 21.0368,\n                \"lng\": 105.8346\n            }\n        },\n        \"notes\": \"Remember to dress appropriately. No shorts or sleeveless shirts.\",\n        \"status\": \"planned\",\n        \"createdAt\": \"2023-05-20T10:15:00Z\",\n        \"updatedAt\": \"2023-05-20T10:15:00Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Activity",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Visit Ho Chi Minh Mausoleum and Museum\",\n    \"endTime\": \"2023-06-16T17:00:00Z\",\n    \"notes\": \"Remember to dress appropriately. No shorts or sleeveless shirts. Museum closes at 16:30.\",\n    \"status\": \"confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities/activity-4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", "trip-1", "days", "1", "activities", "activity-4"]
+            },
+            "description": "Update an existing activity"
+          },
+          "response": [
+            {
+              "name": "Successful Activity Update",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Visit Ho Chi Minh Mausoleum and Museum\",\n    \"endTime\": \"2023-06-16T17:00:00Z\",\n    \"notes\": \"Remember to dress appropriately. No shorts or sleeveless shirts. Museum closes at 16:30.\",\n    \"status\": \"confirmed\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities/activity-4",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trips", "trip-1", "days", "1", "activities", "activity-4"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"activity\": {\n        \"id\": \"activity-4\",\n        \"title\": \"Visit Ho Chi Minh Mausoleum and Museum\",\n        \"type\": \"sightseeing\",\n        \"startTime\": \"2023-06-16T14:00:00Z\",\n        \"endTime\": \"2023-06-16T17:00:00Z\",\n        \"location\": {\n            \"name\": \"Ho Chi Minh Mausoleum\",\n            \"address\": \"2 Hung Vuong, Dien Bien, Ba Dinh, Hanoi, Vietnam\",\n            \"coordinates\": {\n                \"lat\": 21.0368,\n                \"lng\": 105.8346\n            }\n        },\n        \"notes\": \"Remember to dress appropriately. No shorts or sleeveless shirts. Museum closes at 16:30.\",\n        \"status\": \"confirmed\",\n        \"createdAt\": \"2023-05-20T10:15:00Z\",\n        \"updatedAt\": \"2023-05-20T11:30:00Z\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "description": "API endpoints for managing notifications",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/notifications?page=1&limit=20&read=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "read",
+                  "value": "false"
+                }
+              ]
+            },
+            "description": "Get user notifications"
+          },
+          "response": [
+            {
+              "name": "Successful Notifications Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/notifications?page=1&limit=20&read=false",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "notifications"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "read",
+                      "value": "false"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"notifications\": [\n        {\n            \"id\": \"notif-1\",\n            \"type\": \"like\",\n            \"title\": \"New like on your review\",\n            \"message\": \"Jane Smith liked your review 'Amazing Weekend in Hanoi'\",\n            \"read\": false,\n            \"data\": {\n                \"reviewId\": \"review-1\",\n                \"userId\": \"user-2\",\n                \"userName\": \"Jane Smith\",\n                \"userAvatar\": \"https://example.com/avatars/jane.jpg\"\n            },\n            \"createdAt\": \"2023-05-19T14:30:00Z\"\n        },\n        {\n            \"id\": \"notif-2\",\n            \"type\": \"follow\",\n            \"title\": \"New follower\",\n            \"message\": \"Alex Johnson is now following you\",\n            \"read\": false,\n            \"data\": {\n                \"userId\": \"user-3\",\n                \"userName\": \"Alex Johnson\",\n                \"userAvatar\": \"https://example.com/avatars/alex.jpg\"\n            },\n            \"createdAt\": \"2023-05-18T09:45:00Z\"\n        },\n        {\n            \"id\": \"notif-3\",\n            \"type\": \"trip_reminder\",\n            \"title\": \"Upcoming trip reminder\",\n            \"message\": \"Your trip to Hanoi starts in 3 days\",\n            \"read\": false,\n            \"data\": {\n                \"tripId\": \"trip-1\",\n                \"tripTitle\": \"Weekend in Hanoi\",\n                \"startDate\": \"2023-06-15T00:00:00Z\"\n            },\n            \"createdAt\": \"2023-05-17T08:00:00Z\"\n        }\n    ],\n    \"total\": 3,\n    \"page\": 1,\n    \"limit\": 20,\n    \"pages\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/notifications/notif-1/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "notif-1", "read"]
+            },
+            "description": "Mark a notification as read"
+          },
+          "response": [
+            {
+              "name": "Successfully Marked as Read",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/notifications/notif-1/read",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "notifications", "notif-1", "read"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Notification marked as read\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "read-all"]
+            },
+            "description": "Mark all notifications as read"
+          },
+          "response": [
+            {
+              "name": "Successfully Marked All as Read",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/notifications/read-all",
+                  "host": ["{{  {
+                  "raw": "{{baseUrl}}/v1/notifications/read-all",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "notifications", "read-all"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"All notifications marked as read\",\n    \"count\": 3\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Unread Notification Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/notifications/unread-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "unread-count"]
+            },
+            "description": "Get the count of unread notifications"
+          },
+          "response": [
+            {
+              "name": "Successful Count Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/notifications/unread-count",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "notifications", "unread-count"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"count\": 3\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Community/Reviews",
+      "description": "API endpoints for community reviews",
+      "item": [
+        {
+          "name": "Get Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/reviews?page=1&limit=10&sort=createdAt:desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sort",
+                  "value": "createdAt:desc"
+                }
+              ]
+            },
+            "description": "Get a list of community reviews"
+          },
+          "response": [
+            {
+              "name": "Successful Reviews Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/reviews?page=1&limit=10&sort=createdAt:desc",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "reviews"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "createdAt:desc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"reviews\": [\n        {\n            \"id\": \"review-1\",\n            \"title\": \"Amazing Weekend in Hanoi\",\n            \"excerpt\": \"Spent an incredible weekend exploring the Old Quarter and enjoying the local cuisine...\",\n            \"location\": \"Hanoi, Vietnam\",\n            \"rating\": 4.8,\n            \"coverImage\": \"https://example.com/images/reviews/hanoi-review.jpg\",\n            \"likes\": 45,\n            \"comments\": 12,\n            \"tags\": [\"food\", \"culture\", \"budget\"],\n            \"author\": {\n                \"id\": \"user-1\",\n                \"name\": \"John Doe\",\n                \"avatar\": \"https://example.com/avatars/john.jpg\"\n            },\n            \"createdAt\": \"2023-05-10T14:30:00Z\",\n            \"updatedAt\": \"2023-05-12T09:15:00Z\"\n        },\n        {\n            \"id\": \"review-2\",\n            \"title\": \"Hoi An: A Cultural Gem\",\n            \"excerpt\": \"The ancient town of Hoi An is a perfect blend of history, culture, and amazing food...\",\n            \"location\": \"Hoi An, Vietnam\",\n            \"rating\": 5.0,\n            \"coverImage\": \"https://example.com/images/reviews/hoian-review.jpg\",\n            \"likes\": 78,\n            \"comments\": 23,\n            \"tags\": [\"culture\", \"history\", \"photography\"],\n            \"author\": {\n                \"id\": \"user-2\",\n                \"name\": \"Jane Smith\",\n                \"avatar\": \"https://example.com/avatars/jane.jpg\"\n            },\n            \"createdAt\": \"2023-05-08T11:45:00Z\",\n            \"updatedAt\": \"2023-05-09T16:20:00Z\"\n        }\n    ],\n    \"total\": 24,\n    \"page\": 1,\n    \"limit\": 10,\n    \"pages\": 3\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Da Nang: Beach Paradise\",\n    \"content\": \"<p>Da Nang offers some of the most beautiful beaches in Vietnam. My Khe Beach stretches for kilometers with soft white sand and clear blue water.</p><p>The city itself is modern and clean, with excellent infrastructure and friendly locals. The food scene is incredible, with fresh seafood available everywhere.</p><p>Don't miss the Marble Mountains and the Dragon Bridge that breathes fire on weekends!</p>\",\n    \"location\": \"Da Nang, Vietnam\",\n    \"rating\": 4.9,\n    \"coverImage\": \"https://example.com/images/reviews/danang-review.jpg\",\n    \"tags\": [\"beach\", \"food\", \"city\"],\n    \"tripDates\": {\n        \"startDate\": \"2023-04-10T00:00:00Z\",\n        \"endDate\": \"2023-04-15T00:00:00Z\"\n    },\n    \"tripDetails\": {\n        \"accommodation\": \"Hyatt Regency Da Nang\",\n        \"transportation\": \"Flight from Hanoi\",\n        \"budget\": {\n            \"currency\": \"USD\",\n            \"amount\": 800\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"]
+            },
+            "description": "Create a new review"
+          },
+          "response": [
+            {
+              "name": "Successful Review Creation",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Da Nang: Beach Paradise\",\n    \"content\": \"<p>Da Nang offers some of the most beautiful beaches in Vietnam. My Khe Beach stretches for kilometers with soft white sand and clear blue water.</p><p>The city itself is modern and clean, with excellent infrastructure and friendly locals. The food scene is incredible, with fresh seafood available everywhere.</p><p>Don't miss the Marble Mountains and the Dragon Bridge that breathes fire on weekends!</p>\",\n    \"location\": \"Da Nang, Vietnam\",\n    \"rating\": 4.9,\n    \"coverImage\": \"https://example.com/images/reviews/danang-review.jpg\",\n    \"tags\": [\"beach\", \"food\", \"city\"],\n    \"tripDates\": {\n        \"startDate\": \"2023-04-10T00:00:00Z\",\n        \"endDate\": \"2023-04-15T00:00:00Z\"\n    },\n    \"tripDetails\": {\n        \"accommodation\": \"Hyatt Regency Da Nang\",\n        \"transportation\": \"Flight from Hanoi\",\n        \"budget\": {\n            \"currency\": \"USD\",\n            \"amount\": 800\n        }\n    }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/reviews",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "reviews"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"review\": {\n        \"id\": \"review-3\",\n        \"title\": \"Da Nang: Beach Paradise\",\n        \"content\": \"<p>Da Nang offers some of the most beautiful beaches in Vietnam. My Khe Beach stretches for kilometers with soft white sand and clear blue water.</p><p>The city itself is modern and clean, with excellent infrastructure and friendly locals. The food scene is incredible, with fresh seafood available everywhere.</p><p>Don't miss the Marble Mountains and the Dragon Bridge that breathes fire on weekends!</p>\",\n        \"excerpt\": \"Da Nang offers some of the most beautiful beaches in Vietnam. My Khe Beach stretches for kilometers with soft white sand and clear blue water.\",\n        \"location\": \"Da Nang, Vietnam\",\n        \"rating\": 4.9,\n        \"coverImage\": \"https://example.com/images/reviews/danang-review.jpg\",\n        \"likes\": 0,\n        \"comments\": 0,\n        \"tags\": [\"beach\", \"food\", \"city\"],\n        \"author\": {\n            \"id\": \"user-1\",\n            \"name\": \"John Doe\",\n            \"avatar\": \"https://example.com/avatars/john.jpg\"\n        },\n        \"tripDates\": {\n            \"startDate\": \"2023-04-10T00:00:00Z\",\n            \"endDate\": \"2023-04-15T00:00:00Z\"\n        },\n        \"tripDetails\": {\n            \"accommodation\": \"Hyatt Regency Da Nang\",\n            \"transportation\": \"Flight from Hanoi\",\n            \"budget\": {\n                \"currency\": \"USD\",\n                \"amount\": 800\n            }\n        },\n        \"createdAt\": \"2023-05-20T15:30:00Z\",\n        \"updatedAt\": \"2023-05-20T15:30:00Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Like Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/reviews/review-2/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "review-2", "like"]
+            },
+            "description": "Like a review"
+          },
+          "response": [
+            {
+              "name": "Successfully Liked Review",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/reviews/review-2/like",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "reviews", "review-2", "like"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Review liked successfully\",\n    \"likes\": 79\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payment/Subscription",
+      "description": "API endpoints for payment and subscription management",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"method\": \"card\",\n    \"planId\": \"premium-plan\",\n    \"billingPeriod\": \"yearly\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/payment/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payment", "create"]
+            },
+            "description": "Create a payment request"
+          },
+          "response": [
+            {
+              "name": "Successful Payment Creation",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"method\": \"card\",\n    \"planId\": \"premium-plan\",\n    \"billingPeriod\": \"yearly\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/payment/create",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "payment", "create"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"paymentUrl\": \"https://payment-gateway.example.com/checkout/tx_12345\",\n    \"transactionId\": \"tx_12345\",\n    \"expiresAt\": \"2023-05-20T16:30:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"method\": \"card\",\n    \"transactionId\": \"tx_12345\",\n    \"params\": {\n        \"status\": \"success\",\n        \"paymentId\": \"pay_67890\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/payment/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payment", "verify"]
+            },
+            "description": "Verify a payment"
+          },
+          "response": [
+            {
+              "name": "Successful Payment Verification",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"method\": \"card\",\n    \"transactionId\": \"tx_12345\",\n    \"params\": {\n        \"status\": \"success\",\n        \"paymentId\": \"pay_67890\"\n    }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/payment/verify",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "payment", "verify"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Payment verified successfully\",\n    \"user\": {\n        \"id\": \"user-1\",\n        \"subscription\": {\n            \"plan\": \"premium\",\n            \"startDate\": \"2023-05-20T15:45:00Z\",\n            \"expiresAt\": \"2024-05-20T15:45:00Z\",\n            \"status\": \"active\",\n            \"billingPeriod\": \"yearly\"\n        }\n    },\n    \"invoice\": {\n        \"id\": \"inv_12345\",\n        \"amount\": 99.99,\n        \"currency\": \"USD\",\n        \"status\": \"paid\",\n        \"createdAt\": \"2023-05-20T15:45:00Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Subscription Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/subscriptions/plans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subscriptions", "plans"]
+            },
+            "description": "Get available subscription plans"
+          },
+          "response": [
+            {
+              "name": "Successful Plans Retrieval",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/subscriptions/plans",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "subscriptions", "plans"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"plans\": [\n        {\n            \"id\": \"free-plan\",\n            \"name\": \"Free\",\n            \"description\": \"Basic travel planning for casual travelers\",\n            \"features\": [\n                \"Up to 3 trips\",\n                \"Basic itinerary planning\",\n                \"Community access (read-only)\"\n            ],\n            \"limits\": {\n                \"trips\": 3,\n                \"activitiesPerTrip\": 10,\n                \"collaborators\": 0\n            },\n            \"pricing\": {\n                \"monthly\": {\n                    \"amount\": 0,\n                    \"currency\": \"USD\"\n                },\n                \"yearly\": {\n                    \"amount\": 0,\n                    \"currency\": \"USD\"\n                }\n            }\n        },\n        {\n            \"id\": \"premium-plan\",\n            \"name\": \"Premium\",\n            \"description\": \"Advanced travel planning for frequent travelers\",\n            \"features\": [\n                \"Unlimited trips\",\n                \"Advanced itinerary planning\",\n                \"Full community access\",\n                \"Trip sharing and collaboration\",\n                \"Offline access\",\n                \"Priority support\"\n            ],\n            \"limits\": {\n                \"trips\": -1,\n                \"activitiesPerTrip\": -1,\n                \"collaborators\": 5\n            },\n            \"pricing\": {\n                \"monthly\": {\n                    \"amount\": 9.99,\n                    \"currency\": \"USD\"\n                },\n                \"yearly\": {\n                    \"amount\": 99.99,\n                    \"currency\": \"USD\",\n                    \"savings\": \"17%\"\n                }\n            },\n            \"popular\": true\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Maps Integration",
+      "description": "API endpoints for map-related functionality",
+      "item": [
+        {
+          "name": "Geocode Address",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/maps/geocode?address=Hoan Kiem Lake, Hanoi, Vietnam",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps", "geocode"],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "Hoan Kiem Lake, Hanoi, Vietnam"
+                }
+              ]
+            },
+            "description": "Convert an address to coordinates"
+          },
+          "response": [
+            {
+              "name": "Successful Geocoding",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/maps/geocode?address=Hoan Kiem Lake, Hanoi, Vietnam",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "maps", "geocode"],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "Hoan Kiem Lake, Hanoi, Vietnam"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"lat\": 21.0285,\n    \"lng\": 105.8524,\n    \"formatted_address\": \"Hoàn Kiếm Lake, Hàng Trống, Hoàn Kiếm, Hanoi, Vietnam\",\n    \"place_id\": \"ChIJq97XoRGrNTERaIAQsKA3c2M\",\n    \"components\": {\n        \"city\": \"Hanoi\",\n        \"country\": \"Vietnam\",\n        \"country_code\": \"VN\",\n        \"district\": \"Hoàn Kiếm\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reverse Geocode",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/maps/reverse-geocode?lat=21.0285&lng=105.8524",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps", "reverse-geocode"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "21.0285"
+                },
+                {
+                  "key": "lng",
+                  "value": "105.8524"
+                }
+              ]
+            },
+            "description": "Convert coordinates to an address"
+          },
+          "response": [
+            {
+              "name": "Successful Reverse Geocoding",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/maps/reverse-geocode?lat=21.0285&lng=105.8524",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "maps", "reverse-geocode"],
+                  "query": [
+                    {
+                      "key": "lat",
+                      "value": "21.0285"
+                    },
+                    {
+                      "key": "lng",
+                      "value": "105.8524"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"address\": \"Hoàn Kiếm Lake, Hàng Trống, Hoàn Kiếm, Hanoi, Vietnam\",\n    \"place_id\": \"ChIJq97XoRGrNTERaIAQsKA3c2M\",\n    \"components\": {\n        \"name\": \"Hoàn Kiếm Lake\",\n        \"street\": \"Hàng Trống\",\n        \"district\": \"Hoàn Kiếm\",\n        \"city\": \"Hanoi\",\n        \"country\": \"Vietnam\",\n        \"country_code\": \"VN\",\n        \"postal_code\": \"100000\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.travelplanner.example.com",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEiLCJlbWFpbCI6ImV4YW1wbGVAdHJhdmVsLmNvbSIsImlhdCI6MTYxNjc2MzIwMCwiZXhwIjoxNjE2ODQ5NjAwfQ.example_token_signature",
+      "type": "string"
+    }
+  ]
+}
+

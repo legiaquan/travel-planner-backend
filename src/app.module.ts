@@ -5,6 +5,7 @@ import { DynamicModule } from '@nestjs/common';
 
 import { appConfig } from '@configs/app.config';
 import mongooseConfig from '@configs/mongoose.config';
+import { HealthModule } from '@modules/health/health.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import mongooseConfig from '@configs/mongoose.config';
     }),
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    HealthModule,
   ] as DynamicModule[],
 })
 export class AppModule {}
