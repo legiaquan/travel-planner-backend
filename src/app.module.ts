@@ -1,29 +1,27 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { ConfigFactory, ConfigModule } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-
-import { appConfig } from '@configs/app.config';
-import mongooseConfig from '@configs/mongoose.config';
-import { HealthModule } from '@modules/health/health.module';
-
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { LoggerModule } from 'nestjs-pino';
+import { loggerConfig } from './common/logger/logger.config';
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
+import { ResponseTimeMiddleware } from './common/middleware/response-time.middleware';
+import { mongooseConfig } from './configs/mongoose.config';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, mongooseConfig] as ConfigFactory[],
     }),
-
-    MongooseModule.forRoot(process.env.MONGODB_URI),
+    LoggerModule.forRoot(loggerConfig),
+    MongooseModule.forRootAsync({
+      useFactory: () => mongooseConfig,
+    }),
     HealthModule,
-  ] as DynamicModule[],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestContextMiddleware, ResponseTimeMiddleware).forRoutes('*');
+  }
+}

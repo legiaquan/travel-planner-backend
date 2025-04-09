@@ -1,19 +1,52 @@
-import { LoggerService } from '@nestjs/common';
+import { ConsoleLogger, LogLevel } from '@nestjs/common';
 
-export class CustomLoggerService implements LoggerService {
-  log(message: string) {
-    console.log(message);
+export class CustomLoggerService extends ConsoleLogger {
+  private static instance?: CustomLoggerService;
+
+  constructor(context?: string) {
+    super(context);
+    this.setLogLevels(['error', 'warn', 'log', 'debug', 'verbose']);
   }
-  error(message: string, trace: string) {
-    console.error(message, trace);
+
+  static getInstance(context?: string): CustomLoggerService {
+    if (!CustomLoggerService.instance) {
+      CustomLoggerService.instance = new CustomLoggerService(context);
+    }
+    return CustomLoggerService.instance;
   }
-  warn(message: string) {
-    console.warn(message);
+
+  error(message: string, stack?: string, context?: string): void {
+    const formattedMessage = this.formatMessage('ERROR', message, context);
+    super.error(formattedMessage, stack);
   }
-  debug(message: string) {
-    console.debug(message);
+
+  warn(message: string, context?: string): void {
+    const formattedMessage = this.formatMessage('WARN', message, context);
+    super.warn(formattedMessage);
   }
-  verbose(message: string) {
-    console.log(message);
+
+  log(message: string, context?: string): void {
+    const formattedMessage = this.formatMessage('INFO', message, context);
+    super.log(formattedMessage);
+  }
+
+  debug(message: string, context?: string): void {
+    const formattedMessage = this.formatMessage('DEBUG', message, context);
+    super.debug(formattedMessage);
+  }
+
+  verbose(message: string, context?: string): void {
+    const formattedMessage = this.formatMessage('VERBOSE', message, context);
+    super.verbose(formattedMessage);
+  }
+
+  protected formatMessage(level: string, message: string, context?: string): string {
+    const timestamp = new Date().toISOString();
+    const contextStr = context ? `[${context}] ` : '';
+    return `${timestamp} ${level} ${contextStr}${message}`;
+  }
+
+  setLogLevels(levels: LogLevel[]): void {
+    super.setLogLevels(levels);
   }
 }

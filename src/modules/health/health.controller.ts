@@ -1,13 +1,16 @@
-import { BadRequestException, Controller, Get } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ErrorResponse, SuccessResponse } from '../../common/responses';
+import { CustomLoggerService } from '../../utils/logger';
 import { HealthResponseDto, PingResponseDto } from './dto/health.response.dto';
 import { HealthService } from './health.service';
 
 @ApiTags('Health')
 @Controller('health')
 export class HealthController {
+  private readonly logger = CustomLoggerService.getInstance(HealthController.name);
+
   constructor(private readonly healthService: HealthService) {}
 
   @Get()
@@ -40,12 +43,8 @@ export class HealthController {
     type: PingResponseDto,
   })
   ping() {
-    const data = this.healthService.ping();
-
-    throw new BadRequestException('User not found', {});
-
     return new SuccessResponse({
-      data,
+      data: undefined,
       message: 'pong',
     });
   }
