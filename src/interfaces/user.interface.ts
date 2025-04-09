@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { IUser } from '@/types/user.type';
 
 export interface IUserDocument extends Omit<IUser, '_id'>, Document {

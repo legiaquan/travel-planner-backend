@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { CommunityType, CommunityRole } from '../types/community.type';
+
+import { CommunityRole, CommunityType } from '../types/community.type';
 
 export type CommunityDocument = Community & Document;
 

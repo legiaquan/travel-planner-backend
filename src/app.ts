@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,7 +11,6 @@ import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 import { ValidationPipe } from './pipes/validation.pipe';
-import { ConfigService } from '@nestjs/config';
 
 export function setupMiddleware(app: INestApplication) {
   const expressApp = app as NestExpressApplication;

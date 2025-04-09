@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { ISubscription } from '@/types/subscription.type';
 
 export interface ISubscriptionDocument extends Omit<ISubscription, '_id'>, Document {

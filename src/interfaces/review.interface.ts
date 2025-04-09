@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { IReview } from '@/types/review.type';
 
 export interface IReviewDocument extends Omit<IReview, '_id'>, Document {

@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { ICommunity } from '@/types/community.type';
 
 export interface ICommunityDocument extends Omit<ICommunity, '_id'>, Document {

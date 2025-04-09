@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { EActivityType, EActivityStatus } from '../types/activity.type';
+
+import { EActivityStatus, EActivityType } from '../types/activity.type';
 
 export type ActivityDocument = Activity & Document;
 

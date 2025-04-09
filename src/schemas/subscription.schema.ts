@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { SubscriptionStatus, SubscriptionPlan } from '../types/subscription.type';
+
+import { SubscriptionPlan, SubscriptionStatus } from '../types/subscription.type';
 
 export type SubscriptionDocument = Subscription & Document;
 

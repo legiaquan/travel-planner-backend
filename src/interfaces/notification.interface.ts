@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { INotification } from '@/types/notification.type';
 
 export interface INotificationDocument extends Omit<INotification, '_id'>, Document {
@@ -6,4 +7,4 @@ export interface INotificationDocument extends Omit<INotification, '_id'>, Docum
   markAsRead(): Promise<void>;
   markAsArchived(): Promise<void>;
   getNotificationData(): any;
-} 
+}

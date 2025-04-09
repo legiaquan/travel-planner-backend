@@ -2,39 +2,44 @@ import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, ConnectionStates } from 'mongoose';
 
+import { RequestContextService } from '../../common/context/request-context.service';
+import { ErrorResponse, SuccessResponse } from '../../common/responses';
+
 @Injectable()
 export class HealthService {
   constructor(
     @InjectConnection()
     private readonly connection: Connection,
+    private readonly requestContext: RequestContextService,
   ) {}
 
   async checkHealth() {
     try {
       const dbState = this.connection.readyState;
       await Promise.resolve();
-      return {
-        status: 'ok',
-        database: {
-          status: dbState === ConnectionStates.connected ? 'connected' : 'disconnected',
-          readyState: dbState,
+      return new SuccessResponse(
+        {
+          database: {
+            status: dbState === ConnectionStates.connected ? 'connected' : 'disconnected',
+            readyState: dbState,
+          },
         },
-        timestamp: new Date().toISOString(),
-      };
+        this.requestContext,
+      );
     } catch (error: unknown) {
-      return {
-        status: 'error',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
-      };
+      return new ErrorResponse(
+        error instanceof Error ? error.message : 'Unknown error',
+        this.requestContext,
+      );
     }
   }
 
   ping() {
-    return {
-      status: 'ok',
-      message: 'pong',
-      timestamp: new Date().toISOString(),
-    };
+    return new SuccessResponse(
+      {
+        message: 'pong',
+      },
+      this.requestContext,
+    );
   }
 }

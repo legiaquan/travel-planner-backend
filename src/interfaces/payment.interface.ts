@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { IPayment } from '@/types/payment.type';
 
 export interface IPaymentDocument extends Omit<IPayment, '_id'>, Document {

@@ -5,8 +5,8 @@ import { APIGatewayProxyEvent, Callback, Context, Handler } from 'aws-lambda';
 import cookieParser from 'cookie-parser';
 import { RequestListener } from 'http';
 
-import { AppModule } from './app.module';
 import { setupMiddleware } from './app';
+import { AppModule } from './app.module';
 
 let server: Handler;
 

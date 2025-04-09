@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { IActivity } from '@/types/activity.type';
 
 export interface IActivityDocument extends Omit<IActivity, '_id'>, Document {

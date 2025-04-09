@@ -52,4 +52,4 @@ export interface IUpdatePlan {
   currency?: string;
   tags?: string[];
   coverImage?: string;
-} 
+}

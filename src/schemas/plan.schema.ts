@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+
 import { PlanStatus, PlanVisibility } from '../types/plan.type';
 
 export type PlanDocument = Plan & Document;

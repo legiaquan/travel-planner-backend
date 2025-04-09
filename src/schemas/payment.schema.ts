@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { EPaymentStatus, EPaymentMethod } from '@/types/payment.type';
+
+import { EPaymentMethod, EPaymentStatus } from '@/types/payment.type';
 
 export type PaymentDocument = Payment & Document;
 
