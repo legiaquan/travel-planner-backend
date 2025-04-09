@@ -76,8 +76,8 @@ export default tseslint.config(
       'no-console': ['warn', { allow: ['warn', 'error'] }],
 
       // Import sorting rules
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
+      // 'simple-import-sort/imports': 'error',
+      // 'simple-import-sort/exports': 'error',
       'import/first': 'error',
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',

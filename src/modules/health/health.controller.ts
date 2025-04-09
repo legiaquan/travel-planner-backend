@@ -1,7 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { BadRequestException, Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { RequestContextService } from '../../common/context/request-context.service';
 import { ErrorResponse, SuccessResponse } from '../../common/responses';
 import { HealthResponseDto, PingResponseDto } from './dto/health.response.dto';
 import { HealthService } from './health.service';
@@ -9,10 +8,7 @@ import { HealthService } from './health.service';
 @ApiTags('Health')
 @Controller('health')
 export class HealthController {
-  constructor(
-    private readonly healthService: HealthService,
-    private readonly requestContext: RequestContextService,
-  ) {}
+  constructor(private readonly healthService: HealthService) {}
 
   @Get()
   @ApiOperation({ summary: 'Check application health' })
@@ -27,13 +23,11 @@ export class HealthController {
       const data = await this.healthService.checkHealth();
       return new SuccessResponse({
         data,
-        requestContext: this.requestContext,
         message: 'Health check completed successfully',
       });
     } catch (error) {
       return new ErrorResponse({
         error: error instanceof Error ? error.message : 'Unknown error',
-        requestContext: this.requestContext,
       });
     }
   }
@@ -47,9 +41,11 @@ export class HealthController {
   })
   ping() {
     const data = this.healthService.ping();
+
+    throw new BadRequestException('User not found', {});
+
     return new SuccessResponse({
       data,
-      requestContext: this.requestContext,
       message: 'pong',
     });
   }
