@@ -88,24 +88,13 @@ export function setupMiddleware(app: INestApplication) {
   return expressApp;
 }
 
-async function createAppInstance() {
+export async function createAppInstance() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log'],
+    logger: ['error', 'warn', 'log', 'debug', 'verbose', 'fatal'],
+    bufferLogs: true,
   });
 
   setupMiddleware(app);
 
   return app;
-}
-
-async function bootstrapLocal() {
-  const app = await createAppInstance();
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('app.port');
-  await app.listen(port);
-}
-
-// Only run if this file is the entry point
-if (require.main === module) {
-  bootstrapLocal();
 }

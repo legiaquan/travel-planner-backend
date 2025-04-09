@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, ConnectionStates } from 'mongoose';
+import { CustomLoggerService } from '../../utils/logger';
 
 import { HealthResponseDto, PingResponseDto } from './dto/health.response.dto';
+
+const logger = CustomLoggerService.getInstance('HealthService');
 
 @Injectable()
 export class HealthService {

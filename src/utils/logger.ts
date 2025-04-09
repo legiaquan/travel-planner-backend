@@ -1,11 +1,10 @@
-import { ConsoleLogger, LogLevel } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 
-export class CustomLoggerService extends ConsoleLogger {
+export class CustomLoggerService extends Logger {
   private static instance?: CustomLoggerService;
 
   constructor(context?: string) {
     super(context);
-    this.setLogLevels(['error', 'warn', 'log', 'debug', 'verbose']);
   }
 
   static getInstance(context?: string): CustomLoggerService {
@@ -41,12 +40,6 @@ export class CustomLoggerService extends ConsoleLogger {
   }
 
   protected formatMessage(level: string, message: string, context?: string): string {
-    const timestamp = new Date().toISOString();
-    const contextStr = context ? `[${context}] ` : '';
-    return `${timestamp} ${level} ${contextStr}${message}`;
-  }
-
-  setLogLevels(levels: LogLevel[]): void {
-    super.setLogLevels(levels);
+    return message;
   }
 }

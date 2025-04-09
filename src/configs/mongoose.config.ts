@@ -1,19 +1,22 @@
 import { MongooseModuleOptions } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { CustomLoggerService } from '../utils/logger';
+
+const logger = CustomLoggerService.getInstance('MongoDB');
 
 export const mongooseConfig: MongooseModuleOptions = {
   uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/travel-planner',
   connectionFactory: (connection: Connection) => {
     connection.on('connected', () => {
-      console.log('MongoDB connected successfully');
+      logger.log('MongoDB connected successfully');
     });
 
     connection.on('disconnected', () => {
-      console.log('MongoDB disconnected');
+      logger.warn('MongoDB disconnected');
     });
 
     connection.on('error', (error: Error) => {
-      console.error('MongoDB connection error:', error);
+      logger.error('MongoDB connection error:', error.stack);
     });
 
     return connection;

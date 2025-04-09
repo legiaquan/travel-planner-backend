@@ -1,17 +1,16 @@
 import serverlessExpress from '@codegenie/serverless-express';
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { APIGatewayProxyEvent, Callback, Context, Handler } from 'aws-lambda';
 import cookieParser from 'cookie-parser';
 import { RequestListener } from 'http';
 
-import { setupMiddleware } from './app';
-import { AppModule } from './app.module';
+import { createAppInstance, setupMiddleware } from './app';
 
 let server: Handler;
 
 async function bootstrap(): Promise<Handler> {
-  const app = await NestFactory.create(AppModule);
+  const app = await createAppInstance();
+
   setupMiddleware(app);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
