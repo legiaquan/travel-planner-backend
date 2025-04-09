@@ -1,8 +1,11 @@
-import { createAppInstance, setupMiddleware } from './app';
+import { NestFactory } from '@nestjs/core';
+import { setupMiddleware } from './app';
+import { AppModule } from './app.module';
 
-async function bootstrapLocal() {
-  const app = await createAppInstance();
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
 
+  // Setup middleware
   setupMiddleware(app);
 
   const PORT = process.env.PORT || 3000;
@@ -10,4 +13,4 @@ async function bootstrapLocal() {
   await app.listen(PORT);
 }
 
-bootstrapLocal();
+bootstrap();
