@@ -1,32 +1,23 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { IBaseDocument } from '@/interfaces/base-document.interface';
 import { NotificationStatus, NotificationType } from '../types/notification.type';
+import { createBaseSchema } from './base.schema';
 
-export type NotificationDocument = Notification & Document;
-
-@Schema({ timestamps: true })
-export class Notification {
-  @Prop({ required: true, ref: 'User' })
+export type NotificationDocument = IBaseDocument & {
   userId: string;
-
-  @Prop({ type: String, enum: NotificationType, required: true })
   type: NotificationType;
-
-  @Prop({ required: true })
   title: string;
-
-  @Prop({ required: true })
   message: string;
-
-  @Prop({ type: String, enum: NotificationStatus, default: NotificationStatus.UNREAD })
   status: NotificationStatus;
-
-  @Prop({ type: Object, default: {} })
   data: Record<string, any>;
+  readAt?: Date;
+};
 
-  @Prop({ default: null })
-  readAt: Date;
-}
-
-export const NotificationSchema = SchemaFactory.createForClass(Notification);
+export const NotificationSchema = createBaseSchema<NotificationDocument>({
+  userId: { type: String, required: true, ref: 'User' },
+  type: { type: String, enum: NotificationType, required: true },
+  title: { type: String, required: true },
+  message: { type: String, required: true },
+  status: { type: String, enum: NotificationStatus, default: NotificationStatus.UNREAD },
+  data: { type: Object, default: {} },
+  readAt: { type: Date },
+});

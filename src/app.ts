@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -17,6 +17,8 @@ export function setupMiddleware(app: INestApplication) {
   const configService = app.get(ConfigService);
   dotenv.config();
 
+  // Basic security
+  expressApp.disable('x-powered-by');
   expressApp.use(
     helmet({
       contentSecurityPolicy: {
@@ -47,10 +49,34 @@ export function setupMiddleware(app: INestApplication) {
     }),
   );
 
-  // Enable validation
+  // Body parsing - Must be before any middleware that needs body
+  expressApp.use(bodyParser.json({ limit: '2048mb' }));
+  expressApp.use(bodyParser.urlencoded({ limit: '2048mb', extended: true }));
+
+  // Cookie parsing
+  expressApp.use(cookieParser());
+
+  // Compression
+  expressApp.use(compression());
+
+  // CORS
+  expressApp.enableCors({
+    origin: configService.get('app.corsOrigin'),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
+  // Validation
   app.useGlobalPipes(new ValidationPipe());
 
-  //set up swagger
+  // API Versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+    prefix: 'v',
+  });
+
+  // Swagger
   const apiPrefix = configService.get<string>('app.apiPrefix');
   const apiPath = `${apiPrefix}/docs`;
 
@@ -64,25 +90,6 @@ export function setupMiddleware(app: INestApplication) {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(apiPath, app, document, {
     swaggerOptions: { persistAuthorization: true },
-  });
-
-  expressApp.disable('x-powered-by');
-
-  // Configure body parser
-  expressApp.use(bodyParser.json({ limit: '2048mb' }));
-  expressApp.use(bodyParser.urlencoded({ limit: '2048mb', extended: true }));
-
-  // Configure compression
-  expressApp.use(compression());
-
-  // Configure cookie parser
-  expressApp.use(cookieParser());
-
-  // Enable CORS
-  expressApp.enableCors({
-    origin: configService.get('app.corsOrigin'),
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
   });
 
   return expressApp;

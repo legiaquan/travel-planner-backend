@@ -1,64 +1,45 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { IBaseDocument } from '@/interfaces/base-document.interface';
 import { EActivityStatus, EActivityType } from '../types/activity.type';
+import { createBaseSchema } from './base.schema';
 
-export type ActivityDocument = Activity & Document;
-
-@Schema({ timestamps: true })
-export class Activity {
-  @Prop({ required: true, ref: 'Plan' })
-  planId: string;
-
-  @Prop({ type: String, enum: EActivityType, required: true })
+export type ActivityDocument = IBaseDocument & {
+  userId: string;
+  tripId: string;
   type: EActivityType;
-
-  @Prop({ required: true })
   title: string;
-
-  @Prop({ required: true })
   description: string;
-
-  @Prop({ required: true })
-  startTime: Date;
-
-  @Prop({ required: true })
-  endTime: Date;
-
-  @Prop({
-    required: true,
-    type: {
-      name: String,
-      address: String,
-      coordinates: {
-        lat: Number,
-        lng: Number,
-      },
-    },
-  })
   location: {
     name: string;
     address: string;
-    coordinates?: {
-      lat: number;
-      lng: number;
-    };
+    coordinates: [number, number];
   };
-
-  @Prop({ type: String, enum: EActivityStatus, default: EActivityStatus.PLANNED })
+  startTime: Date;
+  endTime: Date;
   status: EActivityStatus;
-
-  @Prop({ default: 0 })
   cost: number;
-
-  @Prop({ default: 'USD' })
   currency: string;
-
-  @Prop({ default: '' })
   notes: string;
+  attachments: string[];
+  isPublic: boolean;
+};
 
-  @Prop({ type: [String], default: [] })
-  images: string[];
-}
-
-export const ActivitySchema = SchemaFactory.createForClass(Activity);
+export const ActivitySchema = createBaseSchema<ActivityDocument>({
+  userId: { type: String, required: true, ref: 'User' },
+  tripId: { type: String, required: true, ref: 'Trip' },
+  type: { type: String, enum: EActivityType, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  location: {
+    name: { type: String, required: true },
+    address: { type: String, required: true },
+    coordinates: { type: [Number], required: true },
+  },
+  startTime: { type: Date, required: true },
+  endTime: { type: Date, required: true },
+  status: { type: String, enum: EActivityStatus, default: EActivityStatus.PLANNED },
+  cost: { type: Number, default: 0 },
+  currency: { type: String, default: 'USD' },
+  notes: { type: String },
+  attachments: { type: [String], default: [] },
+  isPublic: { type: Boolean, default: false },
+});

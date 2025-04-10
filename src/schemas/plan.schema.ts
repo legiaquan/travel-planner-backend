@@ -1,44 +1,33 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { PlanStatus, PlanType } from '../types/plan.type';
+import { createBaseSchema } from './base.schema';
 
-import { PlanStatus, PlanVisibility } from '../types/plan.type';
-
-export type PlanDocument = Plan & Document;
-
-@Schema({ timestamps: true })
-export class Plan {
-  @Prop({ required: true })
-  title: string;
-
-  @Prop({ required: true })
-  description: string;
-
-  @Prop({ required: true })
-  startDate: Date;
-
-  @Prop({ required: true })
-  endDate: Date;
-
-  @Prop({ type: String, enum: PlanStatus, default: PlanStatus.DRAFT })
-  status: PlanStatus;
-
-  @Prop({ type: String, enum: PlanVisibility, default: PlanVisibility.PRIVATE })
-  visibility: PlanVisibility;
-
-  @Prop({ required: true, ref: 'User' })
+export type PlanDocument = IBaseDocument & {
   userId: string;
-
-  @Prop({ default: 0 })
+  title: string;
+  description: string;
+  type: PlanType;
+  status: PlanStatus;
+  startDate: Date;
+  endDate: Date;
+  destination: string;
   budget: number;
-
-  @Prop({ default: 'USD' })
   currency: string;
-
-  @Prop({ type: [String], default: [] })
   tags: string[];
+  isPublic: boolean;
+};
 
-  @Prop({ default: null })
-  coverImage: string;
-}
-
-export const PlanSchema = SchemaFactory.createForClass(Plan);
+export const PlanSchema = createBaseSchema<PlanDocument>({
+  userId: { type: String, required: true, ref: 'User' },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  type: { type: String, enum: PlanType, required: true },
+  status: { type: String, enum: PlanStatus, default: PlanStatus.DRAFT },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  destination: { type: String, required: true },
+  budget: { type: Number, default: 0 },
+  currency: { type: String, default: 'USD' },
+  tags: { type: [String], default: [] },
+  isPublic: { type: Boolean, default: false },
+});

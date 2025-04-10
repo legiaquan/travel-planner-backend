@@ -1,32 +1,23 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { IBaseDocument } from '@/interfaces/base-document.interface';
 import { ReviewType } from '../types/review.type';
+import { createBaseSchema } from './base.schema';
 
-export type ReviewDocument = Review & Document;
-
-@Schema({ timestamps: true })
-export class Review {
-  @Prop({ required: true, ref: 'User' })
+export type ReviewDocument = IBaseDocument & {
   userId: string;
-
-  @Prop({ required: true })
   targetId: string;
-
-  @Prop({ type: String, enum: ReviewType, required: true })
   type: ReviewType;
-
-  @Prop({ required: true, min: 1, max: 5 })
   rating: number;
-
-  @Prop({ required: true })
   content: string;
-
-  @Prop({ type: [String], default: [] })
   images: string[];
-
-  @Prop({ type: [String], default: [] })
   likes: string[];
-}
+};
 
-export const ReviewSchema = SchemaFactory.createForClass(Review);
+export const ReviewSchema = createBaseSchema<ReviewDocument>({
+  userId: { type: String, required: true, ref: 'User' },
+  targetId: { type: String, required: true },
+  type: { type: String, enum: ReviewType, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  content: { type: String, required: true },
+  images: { type: [String], default: [] },
+  likes: { type: [String], default: [] },
+});

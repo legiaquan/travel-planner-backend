@@ -1,25 +1,28 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { IBaseDocument } from '@/interfaces/base-document.interface';
 import { CommunityRole, CommunityType } from '../types/community.type';
+import { createBaseSchema } from './base.schema';
 
-export type CommunityDocument = Community & Document;
-
-@Schema({ timestamps: true })
-export class Community {
-  @Prop({ required: true })
+export type CommunityDocument = IBaseDocument & {
   name: string;
-
-  @Prop({ required: true })
   description: string;
-
-  @Prop({ type: String, enum: CommunityType, default: CommunityType.PUBLIC })
   type: CommunityType;
-
-  @Prop({ required: true, ref: 'User' })
   ownerId: string;
+  members: Array<{
+    userId: string;
+    role: CommunityRole;
+    joinedAt: Date;
+  }>;
+  coverImage?: string;
+  tags: string[];
+  isActive: boolean;
+};
 
-  @Prop({
+export const CommunitySchema = createBaseSchema<CommunityDocument>({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  type: { type: String, enum: CommunityType, default: CommunityType.PUBLIC },
+  ownerId: { type: String, required: true, ref: 'User' },
+  members: {
     type: [
       {
         userId: { type: String, ref: 'User' },
@@ -28,21 +31,8 @@ export class Community {
       },
     ],
     default: [],
-  })
-  members: Array<{
-    userId: string;
-    role: CommunityRole;
-    joinedAt: Date;
-  }>;
-
-  @Prop()
-  coverImage: string;
-
-  @Prop({ type: [String], default: [] })
-  tags: string[];
-
-  @Prop({ default: true })
-  isActive: boolean;
-}
-
-export const CommunitySchema = SchemaFactory.createForClass(Community);
+  },
+  coverImage: { type: String },
+  tags: { type: [String], default: [] },
+  isActive: { type: Boolean, default: true },
+});

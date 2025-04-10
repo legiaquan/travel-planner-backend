@@ -5,6 +5,13 @@ export enum PlanStatus {
   CANCELLED = 'CANCELLED',
 }
 
+export enum PlanType {
+  SOLO = 'SOLO',
+  GROUP = 'GROUP',
+  FAMILY = 'FAMILY',
+  BUSINESS = 'BUSINESS',
+}
+
 export enum PlanVisibility {
   PUBLIC = 'PUBLIC',
   PRIVATE = 'PRIVATE',

@@ -1,44 +1,31 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { IBaseDocument } from '@/interfaces/base-document.interface';
 import { EPaymentMethod, EPaymentStatus } from '@/types/payment.type';
+import { createBaseSchema } from './base.schema';
 
-export type PaymentDocument = Payment & Document;
-
-@Schema({ timestamps: true })
-export class Payment {
-  @Prop({ required: true, ref: 'User' })
+export type PaymentDocument = IBaseDocument & {
   userId: string;
-
-  @Prop({ ref: 'Subscription' })
-  subscriptionId: string;
-
-  @Prop({ required: true })
+  subscriptionId?: string;
   amount: number;
-
-  @Prop({ required: true, default: 'USD' })
   currency: string;
-
-  @Prop({ type: String, enum: EPaymentStatus, default: EPaymentStatus.PENDING })
   status: EPaymentStatus;
-
-  @Prop({ type: String, enum: EPaymentMethod, required: true })
   method: EPaymentMethod;
-
-  @Prop()
-  transactionId: string;
-
-  @Prop()
-  description: string;
-
-  @Prop({ type: Object, default: {} })
+  transactionId?: string;
+  description?: string;
   metadata: Record<string, any>;
+  error?: string;
+  completedAt?: Date;
+};
 
-  @Prop()
-  error: string;
-
-  @Prop()
-  completedAt: Date;
-}
-
-export const PaymentSchema = SchemaFactory.createForClass(Payment);
+export const PaymentSchema = createBaseSchema<PaymentDocument>({
+  userId: { type: String, required: true, ref: 'User' },
+  subscriptionId: { type: String, ref: 'Subscription' },
+  amount: { type: Number, required: true },
+  currency: { type: String, required: true, default: 'USD' },
+  status: { type: String, enum: EPaymentStatus, default: EPaymentStatus.PENDING },
+  method: { type: String, enum: EPaymentMethod, required: true },
+  transactionId: { type: String },
+  description: { type: String },
+  metadata: { type: Object, default: {} },
+  error: { type: String },
+  completedAt: { type: Date },
+});

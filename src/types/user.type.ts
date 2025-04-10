@@ -81,6 +81,7 @@ export interface IUpdateUser {
   lastName?: string;
   avatar?: string;
   isActive?: boolean;
+  refreshToken?: string | null;
 }
 
 export interface ILoginUser {

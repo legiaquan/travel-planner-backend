@@ -1,34 +1,66 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { IBaseDocument } from '@/interfaces/base-document.interface';
 import { ESubscriptionTier, EUserRole, EUserStatus } from '@/types/user.type';
+import { createBaseSchema } from './base.schema';
 
-export type UserDocument = User & Document;
+export type UserDocument = User & IBaseDocument;
 
-@Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true, unique: true, lowercase: true, trim: true })
   email: string;
-
-  @Prop({ required: true })
   password: string;
-
-  @Prop({ required: true, trim: true })
   name: string;
-
-  @Prop()
-  avatar: string;
-
-  @Prop({ type: String, enum: EUserRole, default: EUserRole.USER })
+  avatar?: string;
   role: EUserRole;
-
-  @Prop({ type: String, enum: EUserStatus, default: EUserStatus.ACTIVE })
   status: EUserStatus;
+  lastLogin?: Date;
+  preferences: {
+    language: string;
+    theme: string;
+    currency: string;
+    notifications: {
+      email: boolean;
+      push: boolean;
+      sms: boolean;
+      activityReminders: boolean;
+      tripUpdates: boolean;
+      marketingMessages: boolean;
+      communityUpdates: boolean;
+    };
+  };
+  subscription: {
+    tier: ESubscriptionTier;
+    startDate?: Date;
+    endDate?: Date;
+    autoRenew: boolean;
+    paymentMethod?: string;
+  };
+  socialProfiles?: {
+    google?: string;
+    facebook?: string;
+    twitter?: string;
+  };
+  stats: {
+    tripsCreated: number;
+    tripsCompleted: number;
+    reviewsWritten: number;
+    reviewsLiked: number;
+    followers: number;
+    following: number;
+  };
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
+  emailVerificationToken?: string;
+  emailVerified: boolean;
+}
 
-  @Prop()
-  lastLogin: Date;
-
-  @Prop({
+export const UserSchema = createBaseSchema({
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  password: { type: String, required: true },
+  name: { type: String, required: true, trim: true },
+  avatar: { type: String },
+  role: { type: String, enum: EUserRole, default: EUserRole.USER },
+  status: { type: String, enum: EUserStatus, default: EUserStatus.ACTIVE },
+  lastLogin: { type: Date },
+  preferences: {
     type: {
       language: { type: String, default: 'en' },
       theme: { type: String, default: 'light' },
@@ -57,23 +89,8 @@ export class User {
         communityUpdates: true,
       },
     },
-  })
-  preferences: {
-    language: string;
-    theme: string;
-    currency: string;
-    notifications: {
-      email: boolean;
-      push: boolean;
-      sms: boolean;
-      activityReminders: boolean;
-      tripUpdates: boolean;
-      marketingMessages: boolean;
-      communityUpdates: boolean;
-    };
-  };
-
-  @Prop({
+  },
+  subscription: {
     type: {
       tier: { type: String, enum: ESubscriptionTier, default: ESubscriptionTier.FREE },
       startDate: { type: Date },
@@ -85,29 +102,15 @@ export class User {
       tier: ESubscriptionTier.FREE,
       autoRenew: false,
     },
-  })
-  subscription: {
-    tier: ESubscriptionTier;
-    startDate?: Date;
-    endDate?: Date;
-    autoRenew: boolean;
-    paymentMethod?: string;
-  };
-
-  @Prop({
+  },
+  socialProfiles: {
     type: {
       google: { type: String },
       facebook: { type: String },
       twitter: { type: String },
     },
-  })
-  socialProfiles: {
-    google?: string;
-    facebook?: string;
-    twitter?: string;
-  };
-
-  @Prop({
+  },
+  stats: {
     type: {
       tripsCreated: { type: Number, default: 0 },
       tripsCompleted: { type: Number, default: 0 },
@@ -124,30 +127,12 @@ export class User {
       followers: 0,
       following: 0,
     },
-  })
-  stats: {
-    tripsCreated: number;
-    tripsCompleted: number;
-    reviewsWritten: number;
-    reviewsLiked: number;
-    followers: number;
-    following: number;
-  };
-
-  @Prop()
-  resetPasswordToken: string;
-
-  @Prop()
-  resetPasswordExpires: Date;
-
-  @Prop()
-  emailVerificationToken: string;
-
-  @Prop({ default: false })
-  emailVerified: boolean;
-}
-
-export const UserSchema = SchemaFactory.createForClass(User);
+  },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
+  emailVerificationToken: { type: String },
+  emailVerified: { type: Boolean, default: false },
+});
 
 // Không lưu mật khẩu dưới dạng plain text trong response
 UserSchema.set('toJSON', {

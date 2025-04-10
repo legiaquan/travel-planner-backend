@@ -26,7 +26,7 @@ export const loggerConfig: Params = {
         url: req.url,
         query: req.query,
         params: req.params,
-        body: req.body as Record<string, unknown>,
+        body: (req as any).raw.body as Record<string, unknown>,
         headers: {
           'user-agent': req.headers['user-agent'],
           'x-forwarded-for': req.headers['x-forwarded-for'],
@@ -35,6 +35,7 @@ export const loggerConfig: Params = {
       }),
       res: (res: Response) => ({
         statusCode: res.statusCode,
+        message: res.statusMessage || (res.statusCode >= 400 ? 'Error occurred' : 'Success'),
       }),
       err: (err: Error) => ({
         type: err.name,
@@ -52,10 +53,10 @@ export const loggerConfig: Params = {
       return 'info';
     },
     customSuccessMessage: (req: Request, res: Response) => {
-      return `Request completed - ${req.method} ${req.url} ${res.statusCode}`;
+      return `Request completed - ${req.method} ${req.url} ${res.statusCode} - ${res.statusMessage || 'Success'}`;
     },
     customErrorMessage: (req: Request, res: Response, err: Error) => {
-      return `Request failed - ${req.method} ${req.url} ${res.statusCode} - ${err.message}`;
+      return `Request failed - ${req.method} ${req.url} ${res.statusCode} - ${err?.message || res.statusMessage || 'Error occurred'}`;
     },
     redact: {
       paths: [

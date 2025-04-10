@@ -1,14 +1,15 @@
 {
   "info": {
-    "_postman_id": "f8a7b6c5-d4e3-4c2b-a1b0-9d8e7f6e5d4c",
+    "_postman_id": "19edac3b-8480-4322-960f-b338fdcd6648",
     "name": "Travel Planner API",
     "description": "API collection for the Travel Planner application",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27848440",
+    "_collection_link": "https://karrotiee.postman.co/workspace/panner~45dc955b-145f-4922-b233-4e79ba6730a6/collection/27848440-19edac3b-8480-4322-960f-b338fdcd6648?action=share&source=collection_link&creator=27848440"
   },
   "item": [
     {
       "name": "Authentication",
-      "description": "API endpoints for user authentication",
       "item": [
         {
           "name": "Sign In",
@@ -25,9 +26,9 @@
               "raw": "{\n    \"email\": \"example@travel.com\",\n    \"password\": \"123456789\",\n    \"rememberMe\": true\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/v1/auth/sign-in",
+              "raw": "{{baseUrl}}/auth/sign-in",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "sign-in"]
+              "path": ["auth", "sign-in"]
             },
             "description": "Authenticate a user and get access token"
           },
@@ -49,7 +50,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/sign-in",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "sign-in"]
+                  "path": ["v1", "auth", "sign-in"]
                 }
               },
               "status": "OK",
@@ -81,7 +82,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/sign-in",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "sign-in"]
+                  "path": ["v1", "auth", "sign-in"]
                 }
               },
               "status": "Unauthorized",
@@ -113,9 +114,9 @@
               "raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\",\n    \"password\": \"securePassword123\",\n    \"confirmPassword\": \"securePassword123\",\n    \"terms\": true\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/v1/auth/sign-up",
+              "raw": "{{baseUrl}}/auth/sign-up",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "sign-up"]
+              "path": ["auth", "sign-up"]
             },
             "description": "Register a new user"
           },
@@ -137,7 +138,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/sign-up",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "sign-up"]
+                  "path": ["v1", "auth", "sign-up"]
                 }
               },
               "status": "Created",
@@ -169,7 +170,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/sign-up",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "sign-up"]
+                  "path": ["v1", "auth", "sign-up"]
                 }
               },
               "status": "Bad Request",
@@ -199,7 +200,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/auth/sign-out",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "sign-out"]
+              "path": ["v1", "auth", "sign-out"]
             },
             "description": "Sign out the current user"
           },
@@ -217,7 +218,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/sign-out",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "sign-out"]
+                  "path": ["v1", "auth", "sign-out"]
                 }
               },
               "status": "OK",
@@ -251,7 +252,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/auth/refresh-token",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "refresh-token"]
+              "path": ["v1", "auth", "refresh-token"]
             },
             "description": "Refresh the access token"
           },
@@ -273,7 +274,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/refresh-token",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "refresh-token"]
+                  "path": ["v1", "auth", "refresh-token"]
                 }
               },
               "status": "OK",
@@ -305,7 +306,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/auth/refresh-token",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "auth", "refresh-token"]
+                  "path": ["v1", "auth", "refresh-token"]
                 }
               },
               "status": "Unauthorized",
@@ -322,11 +323,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for user authentication"
     },
     {
       "name": "User Management",
-      "description": "API endpoints for user profile management",
       "item": [
         {
           "name": "Get User Profile",
@@ -341,7 +342,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/users/profile",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "profile"]
+              "path": ["v1", "users", "profile"]
             },
             "description": "Get the current user's profile"
           },
@@ -359,7 +360,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/profile",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "profile"]
+                  "path": ["v1", "users", "profile"]
                 }
               },
               "status": "OK",
@@ -397,7 +398,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/users/profile",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "profile"]
+              "path": ["v1", "users", "profile"]
             },
             "description": "Update the current user's profile"
           },
@@ -423,7 +424,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/profile",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "profile"]
+                  "path": ["v1", "users", "profile"]
                 }
               },
               "status": "OK",
@@ -461,7 +462,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/users/password",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "password"]
+              "path": ["v1", "users", "password"]
             },
             "description": "Change the user's password"
           },
@@ -487,7 +488,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/password",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "password"]
+                  "path": ["v1", "users", "password"]
                 }
               },
               "status": "OK",
@@ -523,7 +524,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/password",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "password"]
+                  "path": ["v1", "users", "password"]
                 }
               },
               "status": "Bad Request",
@@ -553,7 +554,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/users/user-2",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "user-2"]
+              "path": ["v1", "users", "user-2"]
             },
             "description": "Get another user's profile by ID"
           },
@@ -571,7 +572,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/user-2",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "user-2"]
+                  "path": ["v1", "users", "user-2"]
                 }
               },
               "status": "OK",
@@ -599,7 +600,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/nonexistent-user",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "nonexistent-user"]
+                  "path": ["v1", "users", "nonexistent-user"]
                 }
               },
               "status": "Not Found",
@@ -629,7 +630,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/users/user-2/follow",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "user-2", "follow"]
+              "path": ["v1", "users", "user-2", "follow"]
             },
             "description": "Follow another user"
           },
@@ -647,7 +648,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/user-2/follow",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "user-2", "follow"]
+                  "path": ["v1", "users", "user-2", "follow"]
                 }
               },
               "status": "OK",
@@ -677,7 +678,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/users/user-2/unfollow",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "user-2", "unfollow"]
+              "path": ["v1", "users", "user-2", "unfollow"]
             },
             "description": "Unfollow a user"
           },
@@ -695,7 +696,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/users/user-2/unfollow",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "users", "user-2", "unfollow"]
+                  "path": ["v1", "users", "user-2", "unfollow"]
                 }
               },
               "status": "OK",
@@ -712,11 +713,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for user profile management"
     },
     {
       "name": "Trip Planning",
-      "description": "API endpoints for managing trips",
       "item": [
         {
           "name": "Get Trips",
@@ -729,9 +730,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/v1/trips",
+              "raw": "{{baseUrl}}/v1/trips?page=1&limit=10&status=upcoming&sort=startDate:asc",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "trips"],
+              "path": ["v1", "trips"],
               "query": [
                 {
                   "key": "page",
@@ -765,9 +766,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/v1/trips",
+                  "raw": "{{baseUrl}}/v1/trips?page=1&limit=10&status=upcoming&sort=startDate:asc",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips"],
+                  "path": ["v1", "trips"],
                   "query": [
                     {
                       "key": "page",
@@ -823,7 +824,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/trips",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "trips"]
+              "path": ["v1", "trips"]
             },
             "description": "Create a new trip"
           },
@@ -849,7 +850,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/trips",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips"]
+                  "path": ["v1", "trips"]
                 }
               },
               "status": "Created",
@@ -879,7 +880,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/trips/trip-1",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "trips", "trip-1"]
+              "path": ["v1", "trips", "trip-1"]
             },
             "description": "Get details of a specific trip"
           },
@@ -897,7 +898,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/trips/trip-1",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips", "trip-1"]
+                  "path": ["v1", "trips", "trip-1"]
                 }
               },
               "status": "OK",
@@ -925,7 +926,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/trips/nonexistent-trip",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips", "nonexistent-trip"]
+                  "path": ["v1", "trips", "nonexistent-trip"]
                 }
               },
               "status": "Not Found",
@@ -942,11 +943,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for managing trips"
     },
     {
       "name": "Activities",
-      "description": "API endpoints for managing trip activities",
       "item": [
         {
           "name": "Get Trip Itinerary",
@@ -961,7 +962,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/trips/trip-1/itinerary",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "trips", "trip-1", "itinerary"]
+              "path": ["v1", "trips", "trip-1", "itinerary"]
             },
             "description": "Get the full itinerary for a trip"
           },
@@ -979,7 +980,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/trips/trip-1/itinerary",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips", "trip-1", "itinerary"]
+                  "path": ["v1", "trips", "trip-1", "itinerary"]
                 }
               },
               "status": "OK",
@@ -1017,7 +1018,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "trips", "trip-1", "days", "1", "activities"]
+              "path": ["v1", "trips", "trip-1", "days", "1", "activities"]
             },
             "description": "Add a new activity to a trip day"
           },
@@ -1043,7 +1044,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips", "trip-1", "days", "1", "activities"]
+                  "path": ["v1", "trips", "trip-1", "days", "1", "activities"]
                 }
               },
               "status": "Created",
@@ -1081,7 +1082,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities/activity-4",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "trips", "trip-1", "days", "1", "activities", "activity-4"]
+              "path": ["v1", "trips", "trip-1", "days", "1", "activities", "activity-4"]
             },
             "description": "Update an existing activity"
           },
@@ -1107,7 +1108,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/trips/trip-1/days/1/activities/activity-4",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "trips", "trip-1", "days", "1", "activities", "activity-4"]
+                  "path": ["v1", "trips", "trip-1", "days", "1", "activities", "activity-4"]
                 }
               },
               "status": "OK",
@@ -1124,11 +1125,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for managing trip activities"
     },
     {
       "name": "Notifications",
-      "description": "API endpoints for managing notifications",
       "item": [
         {
           "name": "Get Notifications",
@@ -1143,7 +1144,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/notifications?page=1&limit=20&read=false",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "notifications"],
+              "path": ["v1", "notifications"],
               "query": [
                 {
                   "key": "page",
@@ -1175,7 +1176,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/notifications?page=1&limit=20&read=false",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "notifications"],
+                  "path": ["v1", "notifications"],
                   "query": [
                     {
                       "key": "page",
@@ -1219,7 +1220,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/notifications/notif-1/read",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "notifications", "notif-1", "read"]
+              "path": ["v1", "notifications", "notif-1", "read"]
             },
             "description": "Mark a notification as read"
           },
@@ -1237,7 +1238,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/notifications/notif-1/read",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "notifications", "notif-1", "read"]
+                  "path": ["v1", "notifications", "notif-1", "read"]
                 }
               },
               "status": "OK",
@@ -1267,7 +1268,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/notifications/read-all",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "notifications", "read-all"]
+              "path": ["v1", "notifications", "read-all"]
             },
             "description": "Mark all notifications as read"
           },
@@ -1284,10 +1285,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/v1/notifications/read-all",
-                  "host": ["{{  {
-                  "raw": "{{baseUrl}}/v1/notifications/read-all",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "notifications", "read-all"]
+                  "path": ["v1", "notifications", "read-all"]
                 }
               },
               "status": "OK",
@@ -1317,7 +1316,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/notifications/unread-count",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "notifications", "unread-count"]
+              "path": ["v1", "notifications", "unread-count"]
             },
             "description": "Get the count of unread notifications"
           },
@@ -1335,7 +1334,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/notifications/unread-count",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "notifications", "unread-count"]
+                  "path": ["v1", "notifications", "unread-count"]
                 }
               },
               "status": "OK",
@@ -1352,11 +1351,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for managing notifications"
     },
     {
       "name": "Community/Reviews",
-      "description": "API endpoints for community reviews",
       "item": [
         {
           "name": "Get Reviews",
@@ -1366,7 +1365,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/reviews?page=1&limit=10&sort=createdAt:desc",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "reviews"],
+              "path": ["v1", "reviews"],
               "query": [
                 {
                   "key": "page",
@@ -1393,7 +1392,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/reviews?page=1&limit=10&sort=createdAt:desc",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "reviews"],
+                  "path": ["v1", "reviews"],
                   "query": [
                     {
                       "key": "page",
@@ -1445,7 +1444,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/reviews",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "reviews"]
+              "path": ["v1", "reviews"]
             },
             "description": "Create a new review"
           },
@@ -1471,7 +1470,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/reviews",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "reviews"]
+                  "path": ["v1", "reviews"]
                 }
               },
               "status": "Created",
@@ -1501,7 +1500,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/reviews/review-2/like",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "reviews", "review-2", "like"]
+              "path": ["v1", "reviews", "review-2", "like"]
             },
             "description": "Like a review"
           },
@@ -1519,7 +1518,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/reviews/review-2/like",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "reviews", "review-2", "like"]
+                  "path": ["v1", "reviews", "review-2", "like"]
                 }
               },
               "status": "OK",
@@ -1536,11 +1535,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for community reviews"
     },
     {
       "name": "Payment/Subscription",
-      "description": "API endpoints for payment and subscription management",
       "item": [
         {
           "name": "Create Payment",
@@ -1563,7 +1562,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/payment/create",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "payment", "create"]
+              "path": ["v1", "payment", "create"]
             },
             "description": "Create a payment request"
           },
@@ -1589,7 +1588,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/payment/create",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "payment", "create"]
+                  "path": ["v1", "payment", "create"]
                 }
               },
               "status": "OK",
@@ -1627,7 +1626,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/payment/verify",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "payment", "verify"]
+              "path": ["v1", "payment", "verify"]
             },
             "description": "Verify a payment"
           },
@@ -1653,7 +1652,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/payment/verify",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "payment", "verify"]
+                  "path": ["v1", "payment", "verify"]
                 }
               },
               "status": "OK",
@@ -1678,7 +1677,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/subscriptions/plans",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "subscriptions", "plans"]
+              "path": ["v1", "subscriptions", "plans"]
             },
             "description": "Get available subscription plans"
           },
@@ -1691,7 +1690,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/subscriptions/plans",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "subscriptions", "plans"]
+                  "path": ["v1", "subscriptions", "plans"]
                 }
               },
               "status": "OK",
@@ -1708,11 +1707,11 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for payment and subscription management"
     },
     {
       "name": "Maps Integration",
-      "description": "API endpoints for map-related functionality",
       "item": [
         {
           "name": "Geocode Address",
@@ -1727,7 +1726,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/maps/geocode?address=Hoan Kiem Lake, Hanoi, Vietnam",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "maps", "geocode"],
+              "path": ["v1", "maps", "geocode"],
               "query": [
                 {
                   "key": "address",
@@ -1751,7 +1750,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/maps/geocode?address=Hoan Kiem Lake, Hanoi, Vietnam",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "maps", "geocode"],
+                  "path": ["v1", "maps", "geocode"],
                   "query": [
                     {
                       "key": "address",
@@ -1787,7 +1786,7 @@
             "url": {
               "raw": "{{baseUrl}}/v1/maps/reverse-geocode?lat=21.0285&lng=105.8524",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "maps", "reverse-geocode"],
+              "path": ["v1", "maps", "reverse-geocode"],
               "query": [
                 {
                   "key": "lat",
@@ -1815,7 +1814,7 @@
                 "url": {
                   "raw": "{{baseUrl}}/v1/maps/reverse-geocode?lat=21.0285&lng=105.8524",
                   "host": ["{{baseUrl}}"],
-                  "path": ["api", "maps", "reverse-geocode"],
+                  "path": ["v1", "maps", "reverse-geocode"],
                   "query": [
                     {
                       "key": "lat",
@@ -1842,7 +1841,8 @@
             }
           ]
         }
-      ]
+      ],
+      "description": "API endpoints for map-related functionality"
     }
   ],
   "event": [
@@ -1874,4 +1874,3 @@
     }
   ]
 }
-
