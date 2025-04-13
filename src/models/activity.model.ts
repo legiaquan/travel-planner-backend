@@ -54,24 +54,29 @@ const schemaDefinition = {
     type: String,
     required: true,
     trim: true,
+    index: true,
   },
   type: {
     type: String,
     enum: ['accommodation', 'transportation', 'attraction', 'food', 'coffee', 'other'],
     default: 'other',
+    index: true,
   },
   startTime: {
     type: Date,
     required: true,
+    index: true,
   },
   endTime: {
     type: Date,
     required: true,
+    index: true,
   },
   location: {
     type: String,
     required: true,
     trim: true,
+    index: true,
   },
   locationDetails: {
     lat: { type: Number },
@@ -86,15 +91,18 @@ const schemaDefinition = {
     type: Number,
     required: true,
     default: 0,
+    index: true,
   },
   currency: {
     type: String,
     enum: ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'VND'],
     default: 'USD',
+    index: true,
   },
   booked: {
     type: Boolean,
     default: false,
+    index: true,
   },
   checklist: [
     {
@@ -108,3 +116,14 @@ const schemaDefinition = {
 export const ActivityModel = createModel<IActivity>(ACTIVITY_MODEL_NAME, schemaDefinition, {
   collection: ACTIVITY_COLLECTION_NAME,
 });
+
+// Compound indexes
+ActivityModel.schema.index({ tripId: 1, type: 1 });
+ActivityModel.schema.index({ tripId: 1, startTime: 1 });
+ActivityModel.schema.index({ tripId: 1, endTime: 1 });
+ActivityModel.schema.index({ tripId: 1, location: 1 });
+ActivityModel.schema.index({ tripId: 1, booked: 1 });
+ActivityModel.schema.index(
+  { 'locationDetails.lat': 1, 'locationDetails.lng': 1 },
+  { sparse: true },
+);

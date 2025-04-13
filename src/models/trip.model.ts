@@ -45,11 +45,13 @@ const schemaDefinition = {
     type: String,
     required: true,
     trim: true,
+    index: true,
   },
   destination: {
     type: String,
     required: true,
     trim: true,
+    index: true,
   },
   hasDates: {
     type: Boolean,
@@ -61,9 +63,11 @@ const schemaDefinition = {
   },
   startDate: {
     type: Date,
+    index: true,
   },
   endDate: {
     type: Date,
+    index: true,
   },
   description: {
     type: String,
@@ -75,6 +79,7 @@ const schemaDefinition = {
     type: String,
     enum: ['planning', 'upcoming', 'active', 'completed'],
     default: 'planning',
+    index: true,
   },
   budget: {
     type: Number,
@@ -87,9 +92,11 @@ const schemaDefinition = {
   ],
   countryCode: {
     type: String,
+    index: true,
   },
   cityId: {
     type: String,
+    index: true,
   },
   locationDetails: {
     lat: { type: Number },
@@ -104,3 +111,11 @@ const schemaDefinition = {
 export const TripModel = createModel<ITrip>(TRIP_MODEL_NAME, schemaDefinition, {
   collection: TRIP_COLLECTION_NAME,
 });
+
+// Compound indexes
+TripModel.schema.index({ userId: 1, status: 1 });
+TripModel.schema.index({ userId: 1, startDate: 1 });
+TripModel.schema.index({ userId: 1, endDate: 1 });
+TripModel.schema.index({ userId: 1, destination: 1 });
+TripModel.schema.index({ countryCode: 1, cityId: 1 });
+TripModel.schema.index({ 'locationDetails.lat': 1, 'locationDetails.lng': 1 }, { sparse: true });
