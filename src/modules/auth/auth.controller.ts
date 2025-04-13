@@ -11,113 +11,94 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { EDeviceType, LoginDto } from './dto/login.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { RegisterDto } from './dto/register.dto';
+import { ChangePasswordDto, EDeviceType, LoginDto, RefreshTokenDto, RegisterDto } from './dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthResponse, SignUpDto, TokenResponse } from './types/auth.types';
 
 @ApiTags('Authentication')
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('sign-in')
   @ApiOperation({ summary: 'User login' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns access token and user information',
-    schema: {
-      type: 'object',
-      properties: {
-        token: { type: 'string' },
-        refreshToken: { type: 'string' },
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            name: { type: 'string' },
-            email: { type: 'string' },
-            role: { type: 'string' },
-            subscription: {
-              type: 'object',
-              properties: {
-                plan: { type: 'string' },
-                expiresAt: { type: 'string', nullable: true },
-              },
-            },
-            createdAt: { type: 'string' },
-            updatedAt: { type: 'string' },
-          },
+  @ApiBody({
+    type: LoginDto,
+    examples: {
+      web: {
+        value: {
+          email: 'john.doe@example.com',
+          password: 'Password123!',
+          deviceType: EDeviceType.WEB,
+        },
+      },
+      mobile: {
+        value: {
+          email: 'john.doe@example.com',
+          password: 'Password123!',
+          deviceType: EDeviceType.MOBILE,
         },
       },
     },
   })
   @ApiResponse({
+    status: 200,
+    description: 'Returns access token and user information',
+    type: SuccessResponse,
+  })
+  @ApiResponse({
     status: 401,
     description: 'Invalid credentials',
-    schema: {
-      type: 'object',
-      properties: {
-        error: { type: 'string' },
-        code: { type: 'string' },
-      },
-    },
+    type: SuccessResponse,
   })
-  @Post('sign-in')
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    type: SuccessResponse,
+  })
   async login(@Body() loginDto: LoginDto, @Req() req: Request): Promise<AuthResponse> {
     const deviceInfo = extractDeviceInfo(req);
     return this.authService.login(loginDto, deviceInfo);
   }
 
+  @Post('sign-up')
   @ApiOperation({ summary: 'User registration' })
-  @ApiResponse({
-    status: 201,
-    description: 'Returns access token and user information',
-    schema: {
-      type: 'object',
-      properties: {
-        token: { type: 'string' },
-        refreshToken: { type: 'string' },
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            name: { type: 'string' },
-            email: { type: 'string' },
-            avatar: { type: 'string', nullable: true },
-            role: { type: 'string' },
-            subscription: {
-              type: 'object',
-              properties: {
-                plan: { type: 'string' },
-                expiresAt: { type: 'string', nullable: true },
-              },
-            },
-            createdAt: { type: 'string' },
-            updatedAt: { type: 'string' },
-          },
+  @ApiBody({
+    type: RegisterDto,
+    examples: {
+      default: {
+        value: {
+          name: 'John Doe',
+          email: 'john.doe@example.com',
+          password: 'Password123!',
+          confirmPassword: 'Password123!',
+          terms: true,
         },
       },
     },
   })
   @ApiResponse({
-    status: 400,
-    description: 'Email already exists',
-    schema: {
-      type: 'object',
-      properties: {
-        error: { type: 'string' },
-        code: { type: 'string' },
-      },
-    },
+    status: 201,
+    description: 'User registered successfully',
+    type: CreatedResponse,
   })
-  @Post('sign-up')
+  @ApiResponse({
+    status: 400,
+    description: 'Email already exists or invalid data',
+    type: SuccessResponse,
+  })
   async register(@Body() registerDto: RegisterDto): Promise<SuccessResponse<SignUpDto>> {
-    console.log('registerDto: ', registerDto);
     const result = await this.authService.signUp(registerDto);
     return new CreatedResponse({
       message: 'Successfully registered',
@@ -127,21 +108,21 @@ export class AuthController {
     });
   }
 
+  @Post('sign-out')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
   @ApiOperation({ summary: 'User logout' })
+  @ApiSecurity('bearer')
   @ApiResponse({
     status: 200,
     description: 'Successfully signed out',
-    schema: {
-      type: 'object',
-      properties: {
-        success: { type: 'boolean' },
-        message: { type: 'string' },
-      },
-    },
+    type: SuccessResponse,
   })
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @Post('sign-out')
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    type: SuccessResponse,
+  })
   async logout(@Req() req: RequestWithUser): Promise<SuccessResponse<undefined>> {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -155,59 +136,69 @@ export class AuthController {
     });
   }
 
+  @Post('refresh-token')
   @ApiOperation({ summary: 'Refresh access token' })
+  @ApiBody({
+    type: RefreshTokenDto,
+    examples: {
+      default: {
+        value: {
+          refreshToken: 'rt_1a2b3c4d5e6f7g8h9i0j',
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'Returns new access token and refresh token',
-    schema: {
-      type: 'object',
-      properties: {
-        token: { type: 'string' },
-        refreshToken: { type: 'string' },
-      },
-    },
+    type: SuccessResponse,
   })
   @ApiResponse({
     status: 401,
     description: 'Invalid refresh token',
-    schema: {
-      type: 'object',
-      properties: {
-        error: { type: 'string' },
-        code: { type: 'string' },
-      },
-    },
+    type: SuccessResponse,
   })
-  @Post('refresh-token')
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    type: SuccessResponse,
+  })
   async refreshToken(@Body() refreshTokenDto: RefreshTokenDto): Promise<TokenResponse> {
     return this.authService.refreshToken(refreshTokenDto);
   }
 
+  @Patch('password')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Change password' })
+  @ApiSecurity('bearer')
+  @ApiBody({
+    type: ChangePasswordDto,
+    examples: {
+      default: {
+        value: {
+          userId: '507f1f77bcf86cd799439011',
+          currentPassword: 'CurrentPassword123!',
+          newPassword: 'NewPassword123!',
+          confirmPassword: 'NewPassword123!',
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'Password updated successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        success: { type: 'boolean' },
-        message: { type: 'string' },
-      },
-    },
+    type: SuccessResponse,
   })
   @ApiResponse({
     status: 400,
     description: 'Current password is incorrect',
-    schema: {
-      type: 'object',
-      properties: {
-        error: { type: 'string' },
-        code: { type: 'string' },
-      },
-    },
+    type: SuccessResponse,
   })
-  @UseGuards(JwtAuthGuard)
-  @Patch('password')
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    type: SuccessResponse,
+  })
   async changePassword(
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<{ success: boolean; message: string }> {

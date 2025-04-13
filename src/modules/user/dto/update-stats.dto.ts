@@ -3,6 +3,13 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class UpdateStatsDto {
   @ApiProperty({
+    description: 'User ID',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @IsString()
+  userId: string;
+
+  @ApiProperty({
     description: 'Field to update',
     example: 'tripsCreated',
     enum: [

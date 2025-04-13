@@ -1,11 +1,19 @@
 {
   "typescript": {
-    "tsdk": "node_modules/typescript/lib"
+    "tsdk": "node_modules/typescript/lib",
+    "preferences": {
+      "importModuleSpecifier": "non-relative",
+      "importModuleSpecifierEnding": "minimal",
+      "organizeImports": true,
+      "autoImportFileExcludePatterns": ["**/node_modules/**", "**/dist/**"]
+    }
   },
   "javascript": {
     "suggest": {
       "autoImports": true,
-      "completeFunctionCalls": true
+      "completeFunctionCalls": true,
+      "names": true,
+      "paths": true
     }
   },
   "files": {
@@ -17,15 +25,27 @@
       "**/.next": true,
       "**/coverage": true,
       "**/.env": true,
-      "**/.env.*": true
+      "**/.env.*": true,
+      "**/*.spec.ts": true,
+      "**/*.test.ts": true
+    },
+    "associations": {
+      "*.entity.ts": "typescript",
+      "*.dto.ts": "typescript",
+      "*.interface.ts": "typescript"
     }
   },
   "editor": {
     "formatOnSave": true,
     "codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": true,
+      "source.organizeImports": true
     },
-    "defaultFormatter": "esbenp.prettier-vscode"
+    "defaultFormatter": "esbenp.prettier-vscode",
+    "rulers": [80, 100],
+    "wordWrap": "off",
+    "tabSize": 2,
+    "insertSpaces": true
   },
   "search": {
     "exclude": {
@@ -35,11 +55,19 @@
       "**/.next": true,
       "**/coverage": true,
       "**/.env": true,
-      "**/.env.*": true
+      "**/.env.*": true,
+      "**/*.spec.ts": true,
+      "**/*.test.ts": true
     }
   },
   "typescript.preferences": {
     "importModuleSpecifier": "non-relative",
-    "importModuleSpecifierEnding": "minimal"
+    "importModuleSpecifierEnding": "minimal",
+    "organizeImports": true
+  },
+  "nest": {
+    "autoImport": true,
+    "suggestDecorators": true,
+    "suggestInjectables": true
   }
 }

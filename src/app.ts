@@ -78,19 +78,59 @@ export function setupMiddleware(app: INestApplication) {
   });
 
   // Swagger
-  const apiPrefix = configService.get<string>('app.apiPrefix');
-  const apiPath = `${apiPrefix}/docs`;
 
   const config = new DocumentBuilder()
     .setTitle('Travel Planner API')
-    .setDescription('Travel Planner API Documentation')
+    .setDescription('API documentation for Travel Planner application')
     .setVersion('1.0')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', in: 'header' }, 'token')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Default JWT Authorization',
+      },
+      'bearer',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Admin JWT Authorization',
+      },
+      'admin',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'User JWT Authorization',
+      },
+      'user',
+    )
+    .addServer('http://localhost:3000', 'Local Development')
+    .addServer('https://api.travel-planner.com', 'Production')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(apiPath, app, document, {
-    swaggerOptions: { persistAuthorization: true },
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      showExtensions: true,
+      showCommonExtensions: true,
+      deepLinking: true,
+      defaultModelsExpandDepth: 3,
+      defaultModelExpandDepth: 3,
+      docExpansion: 'list',
+      syntaxHighlight: {
+        activate: true,
+        theme: 'monokai',
+      },
+    },
   });
 
   app.useGlobalInterceptors(new ResponseInterceptor());

@@ -24,3 +24,8 @@ export interface AuthResponse extends TokenResponse {
 export interface SignUpDto {
   user: UserResponse;
 }
+
+export enum ESecurityRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}

@@ -7,17 +7,28 @@ export enum EDeviceType {
 }
 
 export class LoginDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'john.doe@example.com',
+    description: 'User email address',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Password123!',
+    description: 'User password',
+  })
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  @ApiProperty({ enum: EDeviceType, default: EDeviceType.WEB })
+  @ApiProperty({
+    enum: EDeviceType,
+    default: EDeviceType.WEB,
+    example: EDeviceType.WEB,
+    description: 'Type of device used for login',
+  })
   @IsEnum(EDeviceType)
   @IsNotEmpty()
   deviceType: EDeviceType = EDeviceType.WEB;
