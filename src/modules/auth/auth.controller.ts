@@ -1,12 +1,25 @@
-import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
+import { CreatedResponse, SuccessResponse } from '@/common/responses';
+import { RequestWithUser } from '@/common/types/request-with-user.type';
+import { extractDeviceInfo } from '@/common/utils/device-info.util';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Patch,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { LoginDto } from './dto/login.dto';
+import { EDeviceType, LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { AuthResponse, TokenResponse } from './types/auth.types';
+import { AuthResponse, SignUpDto, TokenResponse } from './types/auth.types';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -20,7 +33,8 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        access_token: { type: 'string' },
+        token: { type: 'string' },
+        refreshToken: { type: 'string' },
         user: {
           type: 'object',
           properties: {
@@ -28,6 +42,15 @@ export class AuthController {
             name: { type: 'string' },
             email: { type: 'string' },
             role: { type: 'string' },
+            subscription: {
+              type: 'object',
+              properties: {
+                plan: { type: 'string' },
+                expiresAt: { type: 'string', nullable: true },
+              },
+            },
+            createdAt: { type: 'string' },
+            updatedAt: { type: 'string' },
           },
         },
       },
@@ -45,8 +68,9 @@ export class AuthController {
     },
   })
   @Post('sign-in')
-  async signIn(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Req() req: Request): Promise<AuthResponse> {
+    const deviceInfo = extractDeviceInfo(req);
+    return this.authService.login(loginDto, deviceInfo);
   }
 
   @ApiOperation({ summary: 'User registration' })
@@ -92,8 +116,15 @@ export class AuthController {
     },
   })
   @Post('sign-up')
-  async signUp(@Body() registerDto: RegisterDto): Promise<AuthResponse> {
-    return this.authService.signUp(registerDto);
+  async register(@Body() registerDto: RegisterDto): Promise<SuccessResponse<SignUpDto>> {
+    console.log('registerDto: ', registerDto);
+    const result = await this.authService.signUp(registerDto);
+    return new CreatedResponse({
+      message: 'Successfully registered',
+      data: {
+        user: result.user,
+      },
+    });
   }
 
   @ApiOperation({ summary: 'User logout' })
@@ -109,9 +140,19 @@ export class AuthController {
     },
   })
   @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
   @Post('sign-out')
-  async signOut(@Body('userId') userId: string): Promise<boolean> {
-    return this.authService.signOut(userId);
+  async logout(@Req() req: RequestWithUser): Promise<SuccessResponse<undefined>> {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
+    await this.authService.signOut(req.user._id.toString(), token, EDeviceType.WEB);
+
+    return new SuccessResponse({
+      message: 'Successfully signed out',
+    });
   }
 
   @ApiOperation({ summary: 'Refresh access token' })

@@ -4,11 +4,11 @@ import { SuccessResponseType } from '../interfaces/response.interface';
 import { BaseResponse } from './base.response';
 
 export interface SuccessResponseOptions<T> extends Partial<SuccessResponseType> {
-  data: T;
+  data?: T;
 }
 
 export class SuccessResponse<T> extends BaseResponse {
-  data: T;
+  data?: T;
   message: string;
   statusCode: number;
 

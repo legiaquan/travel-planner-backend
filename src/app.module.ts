@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { loggerConfig } from './common/logger/logger.config';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { ResponseTimeMiddleware } from './common/middleware/response-time.middleware';
+import { mongooseConfig } from './configs/mongoose.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { UserModule } from './modules/user/user.module';
@@ -21,9 +22,8 @@ import { UserModule } from './modules/user/user.module';
     LoggerModule.forRoot(loggerConfig),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-      }),
+      useFactory: (configService: ConfigService) =>
+        mongooseConfig(configService.get<string>('MONGODB_URI')),
       inject: [ConfigService],
     }),
     HealthModule,

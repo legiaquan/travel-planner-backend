@@ -1,7 +1,8 @@
-import { Document, Schema } from 'mongoose';
+import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { Schema } from 'mongoose';
 import slugify from 'slugify';
 
-interface ISlugDocument extends Document {
+interface ISlugDocument extends IBaseDocument {
   slug?: string;
   [key: string]: any;
 }

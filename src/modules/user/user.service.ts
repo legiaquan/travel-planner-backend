@@ -1,9 +1,9 @@
 import { hashPassword } from '@/utils/password.util';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../../schemas/user.schema';
+import { IUser } from '../../models/user.model';
+import { UserRepository } from '../../repositories/user.repository';
 import {
+  ESubscriptionTier,
   EUserRole,
   EUserStatus,
   ICreateUser,
@@ -13,26 +13,26 @@ import {
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
-  async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).exec();
+  async findByEmail(email: string): Promise<IUser | null> {
+    return this.userRepository.findByEmail(email);
   }
 
-  async findOne(id: string): Promise<UserDocument | null> {
-    return this.userModel.findById(id).exec();
+  async findOne(id: string): Promise<IUser | null> {
+    return this.userRepository.findById(id);
   }
 
-  async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find().exec();
+  async findAll(): Promise<IUser[]> {
+    return this.userRepository.find();
   }
 
-  async create(createUserDto: ICreateUser): Promise<UserDocument> {
+  async create(createUserDto: ICreateUser): Promise<IUser> {
     const hashedPassword = await hashPassword(createUserDto.password);
-    const user = new this.userModel({
+    const userData = {
       ...createUserDto,
       password: hashedPassword,
-      name: `${createUserDto.firstName} ${createUserDto.lastName}`,
+      name: `${createUserDto.firstName || ''} ${createUserDto.lastName || ''}`.trim(),
       role: EUserRole.USER,
       status: EUserStatus.ACTIVE,
       preferences: {
@@ -50,7 +50,9 @@ export class UserService {
         },
       },
       subscription: {
-        tier: 'FREE',
+        tier: ESubscriptionTier.FREE,
+        startDate: new Date(),
+        endDate: null,
         autoRenew: false,
       },
       stats: {
@@ -62,106 +64,83 @@ export class UserService {
         following: 0,
       },
       emailVerified: false,
-    });
-    return user.save();
+    };
+    return this.userRepository.create(userData);
   }
 
-  async update(id: string, updateUserDto: IUpdateUser): Promise<UserDocument | null> {
-    const updateData: any = { ...updateUserDto };
+  async update(id: string, updateUserDto: IUpdateUser): Promise<IUser | null> {
+    const updateData: Partial<IUser> = { ...updateUserDto };
     if (updateUserDto.firstName || updateUserDto.lastName) {
       updateData.name = `${updateUserDto.firstName || ''} ${updateUserDto.lastName || ''}`.trim();
     }
-    return this.userModel.findByIdAndUpdate(id, updateData, { new: true }).exec();
+    return this.userRepository.update(id, updateData);
   }
 
-  async delete(id: string): Promise<UserDocument | null> {
-    return this.userModel.findByIdAndDelete(id).exec();
+  async delete(id: string): Promise<IUser | null> {
+    return this.userRepository.delete(id);
   }
 
-  async resetPassword(resetPasswordDto: IResetPassword): Promise<UserDocument | null> {
-    const user = await this.userModel
-      .findOne({
-        resetPasswordToken: resetPasswordDto.token,
-        resetPasswordExpires: { $gt: new Date() },
-      })
-      .exec();
-
+  async resetPassword(resetPasswordDto: IResetPassword): Promise<IUser | null> {
+    const user = await this.userRepository.findByResetToken(resetPasswordDto.token);
     if (!user) {
       return null;
     }
 
     const hashedPassword = await hashPassword(resetPasswordDto.newPassword);
-    return this.userModel
-      .findByIdAndUpdate(
-        user._id,
-        {
-          password: hashedPassword,
-          resetPasswordToken: null,
-          resetPasswordExpires: null,
-        },
-        { new: true },
-      )
-      .exec();
+    return this.userRepository.updatePassword(user._id.toString(), hashedPassword);
   }
 
-  async verifyEmail(token: string): Promise<UserDocument | null> {
-    return this.userModel
-      .findOneAndUpdate(
-        { emailVerificationToken: token },
-        {
-          emailVerified: true,
-          emailVerificationToken: null,
-        },
-        { new: true },
-      )
-      .exec();
+  async verifyEmail(token: string): Promise<IUser | null> {
+    const user = await this.userRepository.findByVerificationToken(token);
+    if (!user) {
+      return null;
+    }
+
+    return this.userRepository.update(user._id.toString(), {
+      emailVerified: true,
+      emailVerificationToken: null,
+    });
   }
 
   async updatePreferences(
     id: string,
-    preferences: Partial<User['preferences']>,
-  ): Promise<UserDocument | null> {
-    return this.userModel.findByIdAndUpdate(id, { $set: { preferences } }, { new: true }).exec();
+    preferences: Partial<IUser['preferences']>,
+  ): Promise<IUser | null> {
+    return this.userRepository.updatePreferences(id, preferences);
   }
 
   async updateSubscription(
     id: string,
-    subscription: Partial<User['subscription']>,
-  ): Promise<UserDocument | null> {
-    return this.userModel.findByIdAndUpdate(id, { $set: { subscription } }, { new: true }).exec();
+    subscription: Partial<IUser['subscription']>,
+  ): Promise<IUser | null> {
+    return this.userRepository.updateSubscription(id, subscription);
   }
 
   async linkSocialProfile(
     id: string,
-    provider: keyof User['socialProfiles'],
+    provider: keyof NonNullable<IUser['socialProfiles']>,
     profileId: string,
-  ): Promise<UserDocument | null> {
-    return this.userModel
-      .findByIdAndUpdate(id, { $set: { [`socialProfiles.${provider}`]: profileId } }, { new: true })
-      .exec();
+  ): Promise<IUser | null> {
+    return this.userRepository.linkSocialProfile(id, provider, profileId);
   }
 
   async unlinkSocialProfile(
     id: string,
-    provider: keyof User['socialProfiles'],
-  ): Promise<UserDocument | null> {
-    return this.userModel
-      .findByIdAndUpdate(id, { $unset: { [`socialProfiles.${provider}`]: 1 } }, { new: true })
-      .exec();
+    provider: keyof NonNullable<IUser['socialProfiles']>,
+  ): Promise<IUser | null> {
+    return this.userRepository.unlinkSocialProfile(id, provider);
   }
 
   async updateStats(
     id: string,
-    field: keyof User['stats'],
+    field: keyof IUser['stats'],
     increment: number,
-  ): Promise<UserDocument | null> {
-    return this.userModel
-      .findByIdAndUpdate(id, { $inc: { [`stats.${field}`]: increment } }, { new: true })
-      .exec();
+  ): Promise<IUser | null> {
+    return this.userRepository.updateStats(id, field, increment);
   }
 
-  async updatePassword(id: string, newPassword: string): Promise<UserDocument | null> {
+  async updatePassword(id: string, newPassword: string): Promise<IUser | null> {
     const hashedPassword = await hashPassword(newPassword);
-    return this.userModel.findByIdAndUpdate(id, { password: hashedPassword }, { new: true }).exec();
+    return this.userRepository.updatePassword(id, hashedPassword);
   }
 }

@@ -1,20 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+
+export enum EDeviceType {
+  WEB = 'web',
+  MOBILE = 'mobile',
+}
 
 export class LoginDto {
-  @ApiProperty({
-    description: 'User email address',
-    example: 'user@example.com',
-  })
+  @ApiProperty()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
-  @ApiProperty({
-    description: 'User password',
-    example: 'password123',
-    minLength: 6,
-  })
+  @ApiProperty()
   @IsString()
-  @MinLength(6)
+  @IsNotEmpty()
   password: string;
+
+  @ApiProperty({ enum: EDeviceType, default: EDeviceType.WEB })
+  @IsEnum(EDeviceType)
+  @IsNotEmpty()
+  deviceType: EDeviceType = EDeviceType.WEB;
 }

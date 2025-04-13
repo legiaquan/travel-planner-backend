@@ -10,6 +10,7 @@ import * as dotenv from 'dotenv';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { ValidationPipe } from './pipes/validation.pipe';
 
 export function setupMiddleware(app: INestApplication) {
@@ -91,6 +92,8 @@ export function setupMiddleware(app: INestApplication) {
   SwaggerModule.setup(apiPath, app, document, {
     swaggerOptions: { persistAuthorization: true },
   });
+
+  app.useGlobalInterceptors(new ResponseInterceptor());
 
   return expressApp;
 }

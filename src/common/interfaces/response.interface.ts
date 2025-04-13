@@ -5,3 +5,9 @@ export interface SuccessResponseType {
   statusCode: StatusCodes;
   metadata: Record<string, unknown>;
 }
+
+export interface CreatedResponseType {
+  message: string;
+  statusCode: StatusCodes;
+  metadata: Record<string, unknown>;
+}

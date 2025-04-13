@@ -17,8 +17,10 @@ export interface TokenResponse {
   refreshToken: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  refreshToken: string;
+export interface AuthResponse extends TokenResponse {
+  user: UserResponse;
+}
+
+export interface SignUpDto {
   user: UserResponse;
 }

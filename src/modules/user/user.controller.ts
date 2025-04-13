@@ -9,15 +9,16 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { User } from '../../schemas/user.schema';
+import { IUser } from '../../models/user.model';
 import { EUserRole, ICreateUser, IResetPassword, IUpdateUser } from '../../types/user.type';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { TokenBlacklistGuard } from '../auth/guards/token-blacklist.guard';
 import { UserService } from './user.service';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, TokenBlacklistGuard, RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -69,7 +70,7 @@ export class UserController {
   @Patch('preferences')
   updatePreferences(
     @Request() req: { user: { id: string } },
-    @Body() preferences: Partial<User['preferences']>,
+    @Body() preferences: Partial<IUser['preferences']>,
   ) {
     return this.userService.updatePreferences(req.user.id, preferences);
   }
@@ -77,7 +78,7 @@ export class UserController {
   @Patch('subscription')
   updateSubscription(
     @Request() req: { user: { id: string } },
-    @Body() subscription: Partial<User['subscription']>,
+    @Body() subscription: Partial<IUser['subscription']>,
   ) {
     return this.userService.updateSubscription(req.user.id, subscription);
   }
@@ -85,7 +86,7 @@ export class UserController {
   @Post('social/link')
   linkSocialProfile(
     @Request() req: { user: { id: string } },
-    @Body() data: { provider: keyof User['socialProfiles']; profileId: string },
+    @Body() data: { provider: keyof IUser['socialProfiles']; profileId: string },
   ) {
     return this.userService.linkSocialProfile(req.user.id, data.provider, data.profileId);
   }
@@ -93,7 +94,7 @@ export class UserController {
   @Post('social/unlink/:provider')
   unlinkSocialProfile(
     @Request() req: { user: { id: string } },
-    @Param('provider') provider: keyof User['socialProfiles'],
+    @Param('provider') provider: keyof IUser['socialProfiles'],
   ) {
     return this.userService.unlinkSocialProfile(req.user.id, provider);
   }
@@ -101,7 +102,7 @@ export class UserController {
   @Patch('stats/:field')
   @Roles(EUserRole.ADMIN)
   updateStats(
-    @Param('field') field: keyof User['stats'],
+    @Param('field') field: keyof IUser['stats'],
     @Body() data: { userId: string; increment: number },
   ) {
     return this.userService.updateStats(data.userId, field, data.increment);

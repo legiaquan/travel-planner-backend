@@ -3,27 +3,63 @@ import { Connection } from 'mongoose';
 import { CustomLoggerService } from '../utils/logger';
 
 const logger = CustomLoggerService.getInstance('MongoDB');
+const isProduction = process.env.NODE_ENV === 'production';
+const uri = process.env.MONGODB_URI;
 
-export const mongooseConfig: MongooseModuleOptions = {
-  uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/travel-planner',
-  connectionFactory: (connection: Connection) => {
-    connection.on('connected', () => {
-      logger.log('MongoDB connected successfully');
-    });
+export const mongooseConfig = (uri: string): MongooseModuleOptions => {
+  return {
+    uri,
+    connectionFactory: (connection: Connection) => {
+      connection.on('connected', () => {
+        logger.log('MongoDB connected successfully');
+        if (!isProduction) {
+          logger.debug(
+            `MongoDB connected to ${connection.host}:${connection.port}/${connection.name}`,
+          );
+        }
+      });
 
-    connection.on('disconnected', () => {
-      logger.warn('MongoDB disconnected');
-    });
+      connection.on('disconnected', () => {
+        logger.warn('MongoDB disconnected');
+        if (!isProduction) {
+          logger.debug(
+            `MongoDB disconnected from ${connection.host}:${connection.port}/${connection.name}`,
+          );
+        }
+      });
 
-    connection.on('error', (error: Error) => {
-      logger.error('MongoDB connection error:', error.stack);
-    });
+      connection.on('error', (error: Error) => {
+        logger.error('MongoDB connection error:', error.stack);
+        if (!isProduction) {
+          logger.debug(`MongoDB error on ${connection.host}:${connection.port}/${connection.name}`);
+        }
+      });
 
-    return connection;
-  },
-  retryAttempts: 3,
-  retryDelay: 1000,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-  heartbeatFrequencyMS: 10000,
+      // Add debug event listeners for non-production
+      if (!isProduction) {
+        connection.on('reconnected', () => {
+          logger.log('MongoDB reconnected');
+          logger.debug(
+            `MongoDB reconnected to ${connection.host}:${connection.port}/${connection.name}`,
+          );
+        });
+
+        connection.on('reconnectFailed', () => {
+          logger.error('MongoDB reconnection failed');
+          logger.debug(
+            `MongoDB failed to reconnect to ${connection.host}:${connection.port}/${connection.name}`,
+          );
+        });
+
+        connection.set('debug', true);
+      }
+
+      return connection;
+    },
+    retryAttempts: 3,
+    retryDelay: 1000,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    heartbeatFrequencyMS: 10000,
+  };
 };

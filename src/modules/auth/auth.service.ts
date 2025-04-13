@@ -1,13 +1,15 @@
-import { IUser } from '@/types';
+import { IUser } from '@/models/user.model';
 import { comparePassword, hashPassword } from '@/utils/password.util';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserDocument } from '../../schemas/user.schema';
+import { TokenBlacklistService } from '../token-blacklist/token-blacklist.service';
+import { UserSessionService } from '../user-session/user-session.service';
 import { UserService } from '../user/user.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { LoginDto } from './dto/login.dto';
+import { EDeviceType, LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
+import { AuthResponse, SignUpDto } from './types/auth.types';
 
 interface JwtPayload {
   sub: string;
@@ -40,11 +42,20 @@ interface JwtVerifyResponse {
   exp: number;
 }
 
+interface DeviceInfo {
+  userAgent?: string;
+  ipAddress?: string;
+  platform?: string;
+  browser?: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly tokenBlacklistService: TokenBlacklistService,
+    private readonly userSessionService: UserSessionService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<Omit<IUser, 'password'> | null> {
@@ -53,10 +64,7 @@ export class AuthService {
       return null;
     }
 
-    console.log('Input password:', password);
-    console.log('Stored hash:', user.password);
     const isPasswordValid = await comparePassword(password, user.password);
-    console.log('isPasswordValid: ', isPasswordValid);
     if (!isPasswordValid) {
       return null;
     }
@@ -65,66 +73,57 @@ export class AuthService {
     return result as Omit<IUser, 'password'>;
   }
 
-  async login(loginDto: LoginDto) {
-    const user = await this.validateUser(loginDto.email, loginDto.password);
-    console.log('user: ', user);
+  async login(loginDto: LoginDto, deviceInfo: DeviceInfo): Promise<AuthResponse> {
+    const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = {
-      email: user.email,
-      sub: user._id,
-      role: user.role,
-    };
-
-    const accessToken = this.jwtService.sign(payload);
-
-    return {
-      access_token: accessToken,
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
-    };
-  }
-
-  async signIn(loginDto: LoginDto) {
-    const user = await this.userService.findByEmail(loginDto.email);
-    if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-
     const isPasswordValid = await comparePassword(loginDto.password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
     console.log('isPasswordValid: ', isPasswordValid);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
-    const { token, refreshToken } = await this.generateTokens(user);
+    const { token, refreshToken } = await this.generateTokens(user, loginDto.deviceType);
+
+    // Create new session
+    const decodedToken = this.jwtService.decode(token) as { exp: number };
+    await this.userSessionService.createSession({
+      userId: user._id,
+      deviceType: loginDto.deviceType,
+      deviceInfo: {
+        userAgent: deviceInfo.userAgent || '',
+        ipAddress: deviceInfo.ipAddress || '',
+        platform: deviceInfo.platform || '',
+        browser: deviceInfo.browser || '',
+      },
+      accessToken: token,
+      refreshToken,
+      expiresAt: new Date(decodedToken.exp * 1000),
+    });
+
     return {
       token,
       refreshToken,
       user: {
         id: user._id.toString(),
-        name: user.name,
         email: user.email,
-        avatar: user.avatar,
+        name: user.name,
         role: user.role,
         subscription: {
-          plan: user.subscription.tier,
-          expiresAt: user.subscription.endDate?.toISOString() || null,
+          plan: user.subscription?.tier || 'free',
+          expiresAt: user.subscription?.endDate?.toISOString() || null,
         },
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
-      } as UserResponse,
+      },
     };
   }
 
-  async signUp(registerDto: RegisterDto) {
+  async signUp(registerDto: RegisterDto): Promise<SignUpDto> {
     const existingUser = await this.userService.findByEmail(registerDto.email);
+    console.log('existingUser: ', existingUser);
     if (existingUser) {
       throw new BadRequestException('Email already in use');
     }
@@ -140,15 +139,11 @@ export class AuthService {
       lastName: registerDto.name.split(' ').slice(1).join(' '),
     });
 
-    const { token, refreshToken } = await this.generateTokens(user);
     return {
-      token,
-      refreshToken,
       user: {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
-        avatar: user.avatar,
         role: user.role,
         subscription: {
           plan: user.subscription.tier,
@@ -156,13 +151,23 @@ export class AuthService {
         },
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
-      } as UserResponse,
+      },
     };
   }
 
-  async signOut(userId: string): Promise<boolean> {
-    // Clear refresh token
-    await this.userService.update(userId, { refreshToken: null });
+  async signOut(userId: string, accessToken: string, deviceType: EDeviceType): Promise<boolean> {
+    // Deactivate session
+    await this.userSessionService.deactivateSession(accessToken);
+
+    // Add tokens to blacklist
+    const user = await this.userService.findOne(userId);
+
+    // Add access token to blacklist
+    const decodedAccessToken = this.jwtService.decode(accessToken) as { exp: number };
+    if (decodedAccessToken?.exp) {
+      const expiresAt = new Date(decodedAccessToken.exp * 1000);
+      await this.tokenBlacklistService.addToBlacklist(accessToken, userId, deviceType, expiresAt);
+    }
 
     return true;
   }
@@ -177,7 +182,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      return this.generateTokens(user);
+      return this.generateTokens(user, EDeviceType.WEB);
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -207,14 +212,23 @@ export class AuthService {
     };
   }
 
-  private async generateTokens(user: UserDocument): Promise<TokenResponse> {
+  private async generateTokens(user: IUser, deviceType: EDeviceType): Promise<TokenResponse> {
     const payload: JwtPayload = {
       sub: user._id.toString(),
       email: user.email,
     };
-    const token = await this.jwtService.signAsync(payload);
+    console.log('payload: ', payload);
+
+    // Set different expiration times based on device type
+    const tokenExpiresIn = deviceType === EDeviceType.WEB ? '7d' : '30d';
+    const refreshTokenExpiresIn = deviceType === EDeviceType.WEB ? '30d' : '90d';
+
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: tokenExpiresIn,
+    });
+
     const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '7d',
+      expiresIn: refreshTokenExpiresIn,
     });
 
     return { token, refreshToken };

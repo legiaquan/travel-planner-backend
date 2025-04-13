@@ -1,8 +1,7 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
-import { Schema } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 
 export const auditPlugin = (schema: Schema) => {
-  schema.pre('save', function (this: IBaseDocument, next) {
+  schema.pre('save', function (this: Document, next) {
     if (this.isNew) {
       this.set('createdBy', this.get('updatedBy'));
     }
