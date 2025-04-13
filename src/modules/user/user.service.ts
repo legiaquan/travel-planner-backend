@@ -1,7 +1,5 @@
-import { hashPassword } from '@/utils/password.util';
+import { hashPassword } from '@/common/utils/password.util';
 import { Injectable } from '@nestjs/common';
-import { IUser } from '../../models/user.model';
-import { UserRepository } from '../../repositories/user.repository';
 import {
   ESubscriptionTier,
   EUserRole,
@@ -9,7 +7,9 @@ import {
   ICreateUser,
   IResetPassword,
   IUpdateUser,
-} from '../../types/user.type';
+} from '../../common/types/user.type';
+import { IUser } from '../../models/user.model';
+import { UserRepository } from '../../repositories/user.repository';
 
 @Injectable()
 export class UserService {

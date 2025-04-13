@@ -22,15 +22,15 @@
       "@common/*": ["src/common/*"],
       "@configs/*": ["src/configs/*"],
       "@modules/*": ["src/modules/*"],
-      "@types/*": ["src/types/*"],
+      "@types/*": ["src/common/types/*"],
       "@models/*": ["src/models/*"],
       "@repositories/*": ["src/repositories/*"],
       "@services/*": ["src/services/*"],
       "@controllers/*": ["src/controllers/*"],
       "@dto/*": ["src/dto/*"],
-      "@interfaces/*": ["src/interfaces/*"],
+      "@interfaces/*": ["src/common/interfaces/*"],
       "@middlewares/*": ["src/middlewares/*"],
-      "@utils/*": ["src/utils/*"],
+      "@utils/*": ["src/common/utils/*"],
       "@plugins/*": ["src/plugins/*"]
     }
   }

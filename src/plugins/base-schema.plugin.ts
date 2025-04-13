@@ -1,4 +1,4 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Document, Model, Schema } from 'mongoose';
 
 interface IBaseModel<T extends Document> extends Model<T> {

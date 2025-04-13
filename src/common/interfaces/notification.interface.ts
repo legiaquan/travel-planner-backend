@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { INotification } from '@/types/notification.type';
+import { INotification } from '@/common/types/notification.type';
 
 export interface INotificationDocument extends Omit<INotification, '_id'>, Document {
   // Add any notification-specific methods here

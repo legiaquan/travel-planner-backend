@@ -1,5 +1,5 @@
-import { IBaseDocument } from '../interfaces/base-document.interface';
-import { ESubscriptionTier, EUserRole, EUserStatus } from '../types';
+import { IBaseDocument } from '../common/interfaces/base-document.interface';
+import { ESubscriptionTier, EUserRole, EUserStatus } from '../common/types';
 import { createModel } from './base.model';
 
 export const USER_MODEL_NAME = 'User';

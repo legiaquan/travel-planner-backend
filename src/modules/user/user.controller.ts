@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import {
   Body,
   Controller,
@@ -17,13 +18,12 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { TokenBlacklistGuard } from '../../common/guards/token-blacklist.guard';
 import { CreatedResponse, SuccessResponse } from '../../common/responses';
+import { EUserRole } from '../../common/types/user.type';
 import { IUser } from '../../models/user.model';
-import { EUserRole } from '../../types/user.type';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { TokenBlacklistGuard } from '../auth/guards/token-blacklist.guard';
 import {
   CreateUserDto,
   LinkSocialProfileDto,

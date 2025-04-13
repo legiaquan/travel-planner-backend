@@ -1,4 +1,4 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Schema, SchemaOptions, model as mongooseModel } from 'mongoose';
 import { auditPlugin } from '../plugins/audit.plugin';
 import { baseSchemaPlugin } from '../plugins/base-schema.plugin';

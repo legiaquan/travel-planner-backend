@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { ISubscription } from '@/types/subscription.type';
+import { ISubscription } from '@/common/types/subscription.type';
 
 export interface ISubscriptionDocument extends Omit<ISubscription, '_id'>, Document {
   // Add any subscription-specific methods here

@@ -1,6 +1,6 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Types } from 'mongoose';
-import { CommunityType } from '../types/community.type';
+import { CommunityType } from '../common/types/community.type';
 import { createModel } from './base.model';
 
 export const COMMUNITY_MODEL_NAME = 'Community';

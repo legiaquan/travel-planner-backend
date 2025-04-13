@@ -1,4 +1,4 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Schema } from 'mongoose';
 import slugify from 'slugify';
 

@@ -1,8 +1,8 @@
-import { IUserDocument } from '@/interfaces/user.interface';
+import { IUserDocument } from '@/common/interfaces/user.interface';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { EUserRole } from '../../types/user.type';
+import { EUserRole } from '../../common/types/user.type';
 import { TokenBlacklistService } from '../token-blacklist/token-blacklist.service';
 import { UserService } from '../user/user.service';
 

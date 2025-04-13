@@ -1,6 +1,6 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Types } from 'mongoose';
-import { ESubscriptionTier } from '../types';
+import { ESubscriptionTier } from '../common/types';
 import { createModel } from './base.model';
 
 export const SUBSCRIPTION_MODEL_NAME = 'Subscription';

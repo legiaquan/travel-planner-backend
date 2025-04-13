@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ErrorResponse, SuccessResponse } from '../../common/responses';
-import { CustomLoggerService } from '../../utils/logger';
+import { CustomLoggerService } from '../../common/utils/logger';
 import { HealthResponseDto, PingResponseDto } from './dto/health.response.dto';
 import { HealthService } from './health.service';
 

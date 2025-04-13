@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
-import { ESubscriptionTier } from '../../../types/user.type';
+import { ESubscriptionTier } from '../../../common/types/user.type';
 
 export class UpdateSubscriptionDto {
   @ApiProperty({

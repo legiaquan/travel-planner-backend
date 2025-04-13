@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { IActivity } from '@/types/activity.type';
+import { IActivity } from '@/common/types/activity.type';
 
 export interface IActivityDocument extends Omit<IActivity, '_id'>, Document {
   // Add any activity-specific methods here

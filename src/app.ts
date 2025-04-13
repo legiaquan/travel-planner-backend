@@ -9,9 +9,9 @@ import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import helmet from 'helmet';
 
+import { ValidationPipe } from '@common/pipes/validation.pipe';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { ValidationPipe } from './pipes/validation.pipe';
 
 export function setupMiddleware(app: INestApplication) {
   const expressApp = app as NestExpressApplication;

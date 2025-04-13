@@ -1,6 +1,6 @@
 import { MongooseModuleOptions } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
-import { CustomLoggerService } from '../utils/logger';
+import { CustomLoggerService } from '../common/utils/logger';
 
 const logger = CustomLoggerService.getInstance('MongoDB');
 const isProduction = process.env.NODE_ENV === 'production';

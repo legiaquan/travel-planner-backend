@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-import { CreatedResponseType } from '../interfaces/response.interface';
+import { CreatedResponseType } from '@/common/interfaces/response.interface';
 import { BaseResponse } from './base.response';
 
 export interface CreatedResponseOptions<T> extends Partial<CreatedResponseType> {

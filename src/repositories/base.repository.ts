@@ -1,5 +1,5 @@
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
-import { IBaseDocument } from '../interfaces/base-document.interface';
+import { IBaseDocument } from '../common/interfaces/base-document.interface';
 
 export abstract class BaseRepository<T extends IBaseDocument> {
   constructor(protected readonly model: Model<T>) {}

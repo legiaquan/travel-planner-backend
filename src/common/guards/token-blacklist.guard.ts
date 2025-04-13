@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { TokenBlacklistService } from '../../token-blacklist/token-blacklist.service';
+import { TokenBlacklistService } from '../../modules/token-blacklist/token-blacklist.service';
 
 @Injectable()
 export class TokenBlacklistGuard implements CanActivate {

@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { IReview } from '@/types/review.type';
+import { IReview } from '@/common/types/review.type';
 
 export interface IReviewDocument extends Omit<IReview, '_id'>, Document {
   // Add any review-specific methods here

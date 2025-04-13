@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { IBaseDocument } from '../interfaces/base-document.interface';
+import { IBaseDocument } from '../common/interfaces/base-document.interface';
 import { createModel } from './base.model';
 
 export const PAYMENT_MODEL_NAME = 'Payment';

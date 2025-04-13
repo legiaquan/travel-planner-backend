@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { ICommunity } from '@/types/community.type';
+import { ICommunity } from '@/common/types/community.type';
 
 export interface ICommunityDocument extends Omit<ICommunity, '_id'>, Document {
   // Add any community-specific methods here

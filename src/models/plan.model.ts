@@ -1,4 +1,4 @@
-import { IBaseDocument } from '@/interfaces/base-document.interface';
+import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Types } from 'mongoose';
 import { createModel } from './base.model';
 

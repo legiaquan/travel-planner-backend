@@ -1,5 +1,5 @@
+import { comparePassword, hashPassword } from '@/common/utils/password.util';
 import { IUser } from '@/models/user.model';
-import { comparePassword, hashPassword } from '@/utils/password.util';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TokenBlacklistService } from '../token-blacklist/token-blacklist.service';

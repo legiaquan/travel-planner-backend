@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { CreatedResponse, SuccessResponse } from '@/common/responses';
 import { RequestWithUser } from '@/common/types/request-with-user.type';
 import { extractDeviceInfo } from '@/common/utils/device-info.util';
@@ -22,7 +23,6 @@ import {
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { ChangePasswordDto, EDeviceType, LoginDto, RefreshTokenDto, RegisterDto } from './dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthResponse, SignUpDto, TokenResponse } from './types/auth.types';
 
 @ApiTags('Authentication')
