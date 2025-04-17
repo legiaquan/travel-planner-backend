@@ -12,7 +12,7 @@ import { ResponseTimeMiddleware } from './common/middleware/response-time.middle
 import { mongooseConfig } from './configs/mongoose.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
-import { TripPlanningModule } from './modules/trip-planning/trip-planning.module';
+import { TripModule } from './modules/trip/trip.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -37,7 +37,7 @@ import { UserModule } from './modules/user/user.module';
     TerminusModule,
     AuthModule,
     UserModule,
-    TripPlanningModule,
+    TripModule,
   ] as DynamicModule[],
   controllers: [AppController],
   providers: [AppService],

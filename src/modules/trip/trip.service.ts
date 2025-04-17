@@ -8,7 +8,7 @@ import { CreateActivityDto } from './dto/create-activity.dto';
 import { CreateTripDto } from './dto/create-trip.dto';
 
 @Injectable()
-export class TripPlanningService {
+export class TripService {
   constructor(
     private readonly tripRepository: TripRepository,
     private readonly activityRepository: ActivityRepository,

@@ -62,7 +62,27 @@ export class UserController {
   @ApiResponse({
     status: 201,
     description: 'User created successfully',
-    type: CreatedResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/CreatedResponse',
+        },
+        example: {
+          status: 'Created',
+          statusCode: 201,
+          message: 'User created successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+            role: EUserRole.USER,
+            createdAt: '2024-04-15T10:00:00.000Z',
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -81,7 +101,29 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'List of users',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Users retrieved successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: [
+            {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              name: 'John Doe',
+              email: 'john.doe@example.com',
+              role: EUserRole.USER,
+              createdAt: '2024-04-15T10:00:00.000Z',
+              updatedAt: '2024-04-15T10:00:00.000Z',
+            },
+          ],
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
@@ -98,7 +140,40 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User profile',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Profile retrieved successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+            role: EUserRole.USER,
+            preferences: {
+              language: 'en',
+              theme: 'light',
+              notifications: {
+                email: true,
+                push: true,
+              },
+            },
+            subscription: {
+              plan: 'free',
+              status: 'active',
+              expiresAt: null,
+            },
+            createdAt: '2024-04-15T10:00:00.000Z',
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Request() req: { user: { id: string } }) {
@@ -115,7 +190,40 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User details',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'User retrieved successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+            role: EUserRole.USER,
+            preferences: {
+              language: 'en',
+              theme: 'light',
+              notifications: {
+                email: true,
+                push: true,
+              },
+            },
+            subscription: {
+              plan: 'free',
+              status: 'active',
+              expiresAt: null,
+            },
+            createdAt: '2024-04-15T10:00:00.000Z',
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
@@ -145,7 +253,40 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User updated successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'User updated successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'John Doe Updated',
+            email: 'john.doe.updated@example.com',
+            role: EUserRole.USER,
+            preferences: {
+              language: 'en',
+              theme: 'light',
+              notifications: {
+                email: true,
+                push: true,
+              },
+            },
+            subscription: {
+              plan: 'free',
+              status: 'active',
+              expiresAt: null,
+            },
+            createdAt: '2024-04-15T10:00:00.000Z',
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -165,7 +306,20 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User deleted successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'User deleted successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: null,
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
@@ -190,7 +344,20 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Password reset email sent',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Password reset email sent',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: null,
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
@@ -203,7 +370,20 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Email verified successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Email verified successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: null,
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Invalid token' })
   async verifyEmail(@Param('token') token: string) {
@@ -234,7 +414,31 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Preferences updated successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Preferences updated successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            preferences: {
+              language: 'en',
+              theme: 'light',
+              notifications: {
+                email: true,
+                push: true,
+              },
+            },
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -266,7 +470,28 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Subscription updated successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Subscription updated successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            subscription: {
+              plan: 'premium',
+              status: 'active',
+              expiresAt: '2024-12-31T23:59:59Z',
+            },
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -297,7 +522,26 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Social profile linked successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Social profile linked successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            socialProfiles: {
+              google: '123456789',
+            },
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -321,7 +565,24 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Social profile unlinked successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Social profile unlinked successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            socialProfiles: {},
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -353,7 +614,28 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Stats updated successfully',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Stats updated successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '507f1f77bcf86cd799439011',
+            stats: {
+              tripsCreated: 1,
+              activitiesCreated: 0,
+              lastActive: '2024-04-15T10:00:00.000Z',
+            },
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

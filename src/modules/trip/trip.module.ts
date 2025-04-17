@@ -4,8 +4,8 @@ import { ActivityRepository } from '@/repositories/activity.repository';
 import { TripRepository } from '@/repositories/trip.repository';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TripPlanningController } from './trip-planning.controller';
-import { TripPlanningService } from './trip-planning.service';
+import { TripController } from './trip.controller';
+import { TripService } from './trip.service';
 
 @Module({
   imports: [
@@ -14,8 +14,8 @@ import { TripPlanningService } from './trip-planning.service';
       { name: ActivityModel.modelName, schema: ActivityModel.schema },
     ]),
   ],
-  controllers: [TripPlanningController],
-  providers: [TripPlanningService, TripRepository, ActivityRepository],
-  exports: [TripPlanningService],
+  controllers: [TripController],
+  providers: [TripService, TripRepository, ActivityRepository],
+  exports: [TripService],
 })
-export class TripPlanningModule {}
+export class TripModule {}

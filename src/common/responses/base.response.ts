@@ -1,24 +1,20 @@
-import { StatusCodes } from 'http-status-codes';
-
 export interface BaseResponseOptions {
   status: string;
-  statusCode?: StatusCodes;
-  metadata?: Record<string, unknown>;
+  statusCode?: number;
+  metadata?: Record<string, any>;
 }
 
 export class BaseResponse {
   status: string;
+  statusCode: number;
   timestamp: string;
   requestId?: string;
-  metadata?: Record<string, unknown>;
-  statusCode: StatusCodes;
+  metadata?: Record<string, any>;
 
   constructor(options: BaseResponseOptions) {
     this.status = options.status;
-    this.statusCode = options.statusCode;
+    this.statusCode = options.statusCode || 200;
     this.timestamp = new Date().toISOString();
-    if (options.metadata && Object.keys(options.metadata).length > 0) {
-      this.metadata = options.metadata;
-    }
+    this.metadata = options.metadata;
   }
 }

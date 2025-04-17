@@ -1,11 +1,11 @@
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { CreatedResponse, SuccessResponse } from '@/common/responses';
 import { RequestWithUser } from '@/common/types/request-with-user.type';
-import { extractDeviceInfo } from '@/common/utils/device-info.util';
 import {
   Body,
   Controller,
   HttpCode,
+  HttpStatus,
   Patch,
   Post,
   Req,
@@ -20,91 +20,94 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { ChangePasswordDto, EDeviceType, LoginDto, RefreshTokenDto, RegisterDto } from './dto';
-import { AuthResponse, SignUpDto, TokenResponse } from './types/auth.types';
+import { TokenResponse } from './types/auth.types';
 
-@ApiTags('Authentication')
+@ApiTags('Auth')
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('sign-in')
-  @ApiOperation({ summary: 'User login' })
-  @ApiBody({
-    type: LoginDto,
-    examples: {
-      web: {
-        value: {
-          email: 'john.doe@example.com',
-          password: 'Password123!',
-          deviceType: EDeviceType.WEB,
-        },
-      },
-      mobile: {
-        value: {
-          email: 'john.doe@example.com',
-          password: 'Password123!',
-          deviceType: EDeviceType.MOBILE,
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns access token and user information',
-    type: SuccessResponse,
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Invalid credentials',
-    type: SuccessResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request',
-    type: SuccessResponse,
-  })
-  async login(@Body() loginDto: LoginDto, @Req() req: Request): Promise<AuthResponse> {
-    const deviceInfo = extractDeviceInfo(req);
-    return this.authService.login(loginDto, deviceInfo);
-  }
-
-  @Post('sign-up')
-  @ApiOperation({ summary: 'User registration' })
-  @ApiBody({
-    type: RegisterDto,
-    examples: {
-      default: {
-        value: {
-          name: 'John Doe',
-          email: 'john.doe@example.com',
-          password: 'Password123!',
-          confirmPassword: 'Password123!',
-          terms: true,
-        },
-      },
-    },
-  })
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({
     status: 201,
     description: 'User registered successfully',
-    type: CreatedResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/CreatedResponse',
+        },
+        example: {
+          status: 'Created',
+          statusCode: 201,
+          message: 'User registered successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            email: 'user@example.com',
+            name: 'John Doe',
+            createdAt: '2024-04-15T10:00:00.000Z',
+            updatedAt: '2024-04-15T10:00:00.000Z',
+          },
+        },
+      },
+    },
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Email already exists or invalid data',
-    type: SuccessResponse,
-  })
-  async register(@Body() registerDto: RegisterDto): Promise<SuccessResponse<SignUpDto>> {
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
+  async register(@Body() registerDto: RegisterDto) {
     const result = await this.authService.signUp(registerDto);
     return new CreatedResponse({
-      message: 'Successfully registered',
-      data: {
-        user: result.user,
+      data: result.user,
+      message: 'User registered successfully',
+    });
+  }
+
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({
+    status: 200,
+    description: 'User logged in successfully',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'User logged in successfully',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: {
+            accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            user: {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              email: 'user@example.com',
+              name: 'John Doe',
+            },
+          },
+        },
       },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  async login(@Body() loginDto: LoginDto) {
+    const result = await this.authService.login(loginDto, {
+      userAgent: '',
+      ipAddress: '',
+      platform: '',
+      browser: '',
+    });
+    return new SuccessResponse({
+      data: result,
+      message: 'User logged in successfully',
     });
   }
 
@@ -116,12 +119,38 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Successfully signed out',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SuccessResponse',
+        },
+        example: {
+          status: 'success',
+          statusCode: 200,
+          message: 'Successfully signed out',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          data: null,
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
-    type: SuccessResponse,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/ErrorResponse',
+        },
+        example: {
+          status: 'error',
+          statusCode: 401,
+          message: 'Unauthorized',
+          timestamp: '2024-04-15T10:00:00.000Z',
+          error: 'No token provided',
+        },
+      },
+    },
   })
   async logout(@Req() req: RequestWithUser): Promise<SuccessResponse<undefined>> {
     const token = req.headers.authorization?.split(' ')[1];
