@@ -48,7 +48,7 @@ export class TripService {
     return this.tripRepository.findAll(userId, query);
   }
 
-  async getTripById(userId: Types.ObjectId, tripId: string): Promise<ITrip> {
+  async getTripById(userId: Types.ObjectId, tripId: string): Promise<ITrip | null> {
     return this.tripRepository.findById(userId, tripId);
   }
 
@@ -56,7 +56,7 @@ export class TripService {
     userId: Types.ObjectId,
     tripId: string,
     updateData: Partial<ITrip>,
-  ): Promise<ITrip> {
+  ): Promise<ITrip | null> {
     return this.tripRepository.update(userId, tripId, updateData);
   }
 
@@ -112,7 +112,7 @@ export class TripService {
     tripId: string,
     activityId: string,
     updateData: Partial<IActivity>,
-  ): Promise<IActivity> {
+  ): Promise<IActivity | null> {
     // Verify trip exists and belongs to user
     const trip = await this.tripRepository.findById(userId, tripId);
     if (!trip) {

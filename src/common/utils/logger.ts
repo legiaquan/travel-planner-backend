@@ -5,7 +5,7 @@ export class CustomLoggerService extends ConsoleLogger {
   private static instance: CustomLoggerService;
 
   private constructor(context?: string) {
-    super(context);
+    super(context ?? '');
   }
 
   static getInstance(context?: string): CustomLoggerService {

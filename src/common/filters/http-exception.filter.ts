@@ -63,7 +63,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     const errorResponse = new ErrorResponse({
-      error: message,
+      error: message ?? error,
       statusCode,
       metadata: {
         path: request.url,

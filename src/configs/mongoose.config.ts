@@ -4,7 +4,6 @@ import { CustomLoggerService } from '../common/utils/logger';
 
 const logger = CustomLoggerService.getInstance('MongoDB');
 const isProduction = process.env.NODE_ENV === 'production';
-const uri = process.env.MONGODB_URI;
 
 export const mongooseConfig = (uri: string): MongooseModuleOptions => {
   return {

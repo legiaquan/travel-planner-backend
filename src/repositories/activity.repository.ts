@@ -12,7 +12,7 @@ export class ActivityRepository {
     return activity.save();
   }
 
-  async findById(activityId: string): Promise<IActivity> {
+  async findById(activityId: string): Promise<IActivity | null> {
     return this.activityModel.findById(activityId).exec();
   }
 
@@ -20,10 +20,11 @@ export class ActivityRepository {
     return this.activityModel.find({ tripId }).exec();
   }
 
-  async update(activityId: string, updateData: Partial<IActivity>): Promise<IActivity> {
-    return this.activityModel
+  async update(activityId: string, updateData: Partial<IActivity>): Promise<IActivity | null> {
+    const updatedActivity = await this.activityModel
       .findByIdAndUpdate(activityId, { $set: updateData }, { new: true })
       .exec();
+    return updatedActivity || null;
   }
 
   async delete(activityId: string): Promise<void> {

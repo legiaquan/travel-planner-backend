@@ -24,7 +24,7 @@ import { UserModule } from './modules/user/user.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) =>
-        mongooseConfig(configService.get<string>('MONGODB_URI')),
+        mongooseConfig(configService.get<string>('MONGODB_URI') || ''),
       inject: [ConfigService],
     }),
     HealthModule,

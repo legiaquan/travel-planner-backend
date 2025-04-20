@@ -8,8 +8,10 @@ export const hashPassword = async (password: string): Promise<string> => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
     return hash;
-  } catch (error) {
-    throw new Error(`Failed to hash password: ${error.message}`);
+  } catch (error: unknown) {
+    throw new Error(
+      `Failed to hash password: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    );
   }
 };
 
@@ -23,7 +25,9 @@ export const comparePassword = async (
   try {
     const result = await bcrypt.compare(password, hashedPassword);
     return result;
-  } catch (error) {
-    throw new Error(`Failed to compare passwords: ${error.message}`);
+  } catch (error: unknown) {
+    throw new Error(
+      `Failed to compare passwords: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    );
   }
 };

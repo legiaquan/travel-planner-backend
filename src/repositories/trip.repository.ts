@@ -12,7 +12,7 @@ export class TripRepository {
     return trip.save();
   }
 
-  async findById(userId: Types.ObjectId, tripId: string): Promise<ITrip> {
+  async findById(userId: Types.ObjectId, tripId: string): Promise<ITrip | null> {
     return this.tripModel.findOne({ _id: tripId, userId }).populate('activities').exec();
   }
 
@@ -56,7 +56,11 @@ export class TripRepository {
     };
   }
 
-  async update(userId: Types.ObjectId, tripId: string, updateData: Partial<ITrip>): Promise<ITrip> {
+  async update(
+    userId: Types.ObjectId,
+    tripId: string,
+    updateData: Partial<ITrip>,
+  ): Promise<ITrip | null> {
     return this.tripModel
       .findOneAndUpdate({ _id: tripId, userId }, { $set: updateData }, { new: true })
       .populate('activities')

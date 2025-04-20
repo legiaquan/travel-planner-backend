@@ -3,7 +3,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { EUserRole } from '../../common/types/user.type';
-import { TokenBlacklistService } from '../token-blacklist/token-blacklist.service';
 import { UserService } from '../user/user.service';
 
 interface JwtPayload {
@@ -14,10 +13,7 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly userService: UserService,
-    private readonly tokenBlacklistService: TokenBlacklistService,
-  ) {
+  constructor(private readonly userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,

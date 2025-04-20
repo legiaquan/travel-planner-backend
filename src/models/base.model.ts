@@ -1,7 +1,6 @@
 import { IBaseDocument } from '@/common/interfaces/base-document.interface';
 import { Schema, SchemaOptions, model as mongooseModel } from 'mongoose';
 import { auditPlugin } from '../plugins/audit.plugin';
-import { baseSchemaPlugin } from '../plugins/base-schema.plugin';
 import { paginationPlugin } from '../plugins/pagination.plugin';
 import { versionPlugin } from '../plugins/version.plugin';
 
@@ -32,7 +31,7 @@ export const createModel = <T extends IBaseDocument>(
   });
 
   // Apply common plugins
-  schema.plugin(baseSchemaPlugin);
+  // schema.plugin(baseSchemaPlugin);
   schema.plugin(versionPlugin);
   schema.plugin(auditPlugin);
   schema.plugin(paginationPlugin);

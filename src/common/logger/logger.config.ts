@@ -1,5 +1,5 @@
 import { RequestMethod } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { IncomingMessage, ServerResponse } from 'http';
 import { Params } from 'nestjs-pino';
 
 export const loggerConfig: Params = {
@@ -20,20 +20,20 @@ export const loggerConfig: Params = {
       service: 'travel-planner-api',
     }),
     serializers: {
-      req: (req: Request) => ({
-        id: req.id,
+      req: (req: IncomingMessage) => ({
+        id: (req as any).id,
         method: req.method,
         url: req.url,
-        query: req.query,
-        params: req.params,
-        body: (req as any).raw.body as Record<string, unknown>,
+        query: (req as any).query,
+        params: (req as any).params,
+        body: (req as any).body,
         headers: {
           'user-agent': req.headers['user-agent'],
           'x-forwarded-for': req.headers['x-forwarded-for'],
           'x-real-ip': req.headers['x-real-ip'],
         },
       }),
-      res: (res: Response) => ({
+      res: (res: ServerResponse) => ({
         statusCode: res.statusCode,
         message: res.statusMessage || (res.statusCode >= 400 ? 'Error occurred' : 'Success'),
       }),
@@ -43,7 +43,7 @@ export const loggerConfig: Params = {
         stack: err.stack,
       }),
     },
-    customLogLevel: (req: Request, res: Response, err: Error) => {
+    customLogLevel: (_req: IncomingMessage, res: ServerResponse, err?: Error) => {
       if (res.statusCode >= 500 || err) {
         return 'error';
       }
@@ -52,10 +52,10 @@ export const loggerConfig: Params = {
       }
       return 'info';
     },
-    customSuccessMessage: (req: Request, res: Response) => {
+    customSuccessMessage: (req: IncomingMessage, res: ServerResponse) => {
       return `Request completed - ${req.method} ${req.url} ${res.statusCode} - ${res.statusMessage || 'Success'}`;
     },
-    customErrorMessage: (req: Request, res: Response, err: Error) => {
+    customErrorMessage: (req: IncomingMessage, res: ServerResponse, err: Error) => {
       return `Request failed - ${req.method} ${req.url} ${res.statusCode} - ${err?.message || res.statusMessage || 'Error occurred'}`;
     },
     redact: {

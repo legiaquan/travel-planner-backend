@@ -1,6 +1,6 @@
 import serverlessExpress from '@codegenie/serverless-express';
 import { ValidationPipe } from '@nestjs/common';
-import { APIGatewayProxyEvent, Callback, Context, Handler } from 'aws-lambda';
+import { Callback, Context, Handler } from 'aws-lambda';
 import cookieParser from 'cookie-parser';
 import { RequestListener } from 'http';
 
@@ -17,18 +17,15 @@ async function bootstrap(): Promise<Handler> {
   await app.init();
 
   const expressInstance = app.getHttpAdapter().getInstance() as RequestListener;
-  const lambdaHandler: Handler = serverlessExpress({ app: expressInstance });
-  return lambdaHandler;
+  return serverlessExpress({ app: expressInstance });
 }
 
 // AWS Lambda handler function
 export const handler: Handler = async (
-  event: APIGatewayProxyEvent,
+  event: any,
   context: Context,
   callback: Callback,
 ): Promise<any> => {
-  if (!server) {
-    server = await bootstrap();
-  }
-  return await server(event, context, callback);
+  server = server ?? (await bootstrap());
+  return server(event, context, callback);
 };

@@ -21,20 +21,6 @@ interface TokenResponse {
   refreshToken: string;
 }
 
-interface UserResponse {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  role: string;
-  subscription: {
-    plan: string;
-    expiresAt: string | null;
-  };
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 interface JwtVerifyResponse {
   sub: string;
   email: string;
@@ -69,6 +55,7 @@ export class AuthService {
       return null;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...result } = user.toObject() as IUser;
     return result as Omit<IUser, 'password'>;
   }
@@ -159,9 +146,6 @@ export class AuthService {
     // Deactivate session
     await this.userSessionService.deactivateSession(accessToken);
 
-    // Add tokens to blacklist
-    const user = await this.userService.findOne(userId);
-
     // Add access token to blacklist
     const decodedAccessToken = this.jwtService.decode(accessToken) as { exp: number };
     if (decodedAccessToken?.exp) {
@@ -183,7 +167,7 @@ export class AuthService {
       }
 
       return this.generateTokens(user, EDeviceType.WEB);
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
